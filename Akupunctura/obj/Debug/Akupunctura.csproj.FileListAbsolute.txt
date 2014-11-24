@@ -1,0 +1,11 @@
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Akupunctura.resources
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csprojResolveAssemblyReference.cache
+C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Device.Device_01.resources
+D:\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
+D:\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
