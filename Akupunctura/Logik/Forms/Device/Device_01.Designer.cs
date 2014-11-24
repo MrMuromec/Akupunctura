@@ -1,4 +1,4 @@
-﻿namespace Akupunctura.Logik.Device
+﻿namespace Akupunctura.Logik.Forms.Device
 {
   partial class Device_01
   {

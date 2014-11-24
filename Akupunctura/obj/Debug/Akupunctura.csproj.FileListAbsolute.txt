@@ -9,3 +9,12 @@ C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\D
 C:\Users\Пользователь\Documents\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Device.Device_01.resources
 D:\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
 D:\GitHub\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csprojResolveAssemblyReference.cache
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Akupunctura.resources
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Device.Device_01.resources

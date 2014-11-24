@@ -49,26 +49,24 @@
     <Compile Include="Akupunctura.Designer.cs">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logik\Commands for files\control_of_doctors.cs" />
-    <Compile Include="Logik\Commands for files\control_of_measurement.cs" />
-    <Compile Include="Logik\Commands for files\control_of_patients.cs" />
     <Compile Include="Logik\control_database.cs" />
-    <Compile Include="Logik\Commands for files\Files\doctor.cs" />
-    <Compile Include="Logik\Commands for files\Files\measurement.cs" />
-    <Compile Include="Logik\Commands for files\Files\patient.cs" />
-    <Compile Include="Logik\Commands for files\Files\rights_doctor.cs" />
-    <Compile Include="Logik\Device\Device_01.cs">
+    <Compile Include="Logik\Files\doctor.cs" />
+    <Compile Include="Logik\Files\measurement.cs" />
+    <Compile Include="Logik\Files\patient.cs" />
+    <Compile Include="Logik\Files\rights_doctor.cs" />
+    <Compile Include="Logik\Forms\Device\Device_01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logik\Device\Device_01.Designer.cs">
+    <Compile Include="Logik\Forms\Device\Device_01.Designer.cs">
       <DependentUpon>Device_01.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logik\Forms\Device\Package_Coding.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Akupunctura.resx">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Logik\Device\Device_01.resx">
+    <EmbeddedResource Include="Logik\Forms\Device\Device_01.resx">
       <DependentUpon>Device_01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -90,9 +88,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logik\Forms\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

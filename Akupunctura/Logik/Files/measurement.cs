@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Akupunctura.Logik.Commands_for_files.Files
+namespace Akupunctura.Logik.Files
 {
   [Serializable]
-  public class rights_doctor
+  public class measurement
   {
   }
 }

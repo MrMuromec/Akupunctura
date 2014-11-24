@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Akupunctura.Logik;
-using Akupunctura.Logik.Device;
 
 namespace Akupunctura
 {
@@ -22,9 +21,12 @@ namespace Akupunctura
 
     private void МенюРаботыПрибораToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        BD.MainForms(this, "Device01");
+        /*
       Device_01 device01 = new Device_01(this);
       device01.MdiParent = this;
       device01.Show();
+         * */
     }
   }
 }

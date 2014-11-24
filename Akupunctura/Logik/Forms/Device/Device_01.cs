@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Akupunctura.Logik.Device
+namespace Akupunctura.Logik.Forms.Device
 {
   public partial class Device_01 : Form
   {
