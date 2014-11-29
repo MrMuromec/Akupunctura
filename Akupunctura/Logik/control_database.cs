@@ -18,7 +18,7 @@ namespace Akupunctura.Logik
           {
               case "Device01":
                   {
-                      Device_01 device01 = new Device_01(mainForm);
+                      Device01 device01 = new Device01(mainForm);
                       device01.MdiParent = mainForm;
                       device01.Show();
                   }

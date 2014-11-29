@@ -11,6 +11,7 @@
     <AssemblyName>Akupunctura</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,11 +55,11 @@
     <Compile Include="Logik\Files\measurement.cs" />
     <Compile Include="Logik\Files\patient.cs" />
     <Compile Include="Logik\Files\rights_doctor.cs" />
-    <Compile Include="Logik\Forms\Device\Device_01.cs">
+    <Compile Include="Logik\Forms\Device\Device01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logik\Forms\Device\Device_01.Designer.cs">
-      <DependentUpon>Device_01.cs</DependentUpon>
+    <Compile Include="Logik\Forms\Device\Device01.Designer.cs">
+      <DependentUpon>Device01.cs</DependentUpon>
     </Compile>
     <Compile Include="Logik\Forms\Device\Package_Coding.cs" />
     <Compile Include="Program.cs" />
@@ -66,8 +67,8 @@
     <EmbeddedResource Include="Akupunctura.resx">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Logik\Forms\Device\Device_01.resx">
-      <DependentUpon>Device_01.cs</DependentUpon>
+    <EmbeddedResource Include="Logik\Forms\Device\Device01.resx">
+      <DependentUpon>Device01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -77,7 +78,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
