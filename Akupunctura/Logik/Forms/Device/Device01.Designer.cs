@@ -41,18 +41,18 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.Send = new System.Windows.Forms.Button();
             this.cd_second = new System.Windows.Forms.ComboBox();
             this.cb_first = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -221,6 +221,49 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Посылка";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(308, 58);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(58, 22);
+            this.textBox1.TabIndex = 7;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(179, 56);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(123, 26);
+            this.button4.TabIndex = 6;
+            this.button4.Text = "Отправить 0x01";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(123, 56);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(50, 26);
+            this.button3.TabIndex = 5;
+            this.button3.Text = "0xFF";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(67, 56);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(50, 26);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "0x01";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(11, 56);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(50, 26);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "0x00";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // Send
             // 
             this.Send.Location = new System.Drawing.Point(125, 23);
@@ -285,49 +328,6 @@
             this.cb_first.Size = new System.Drawing.Size(50, 24);
             this.cb_first.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(11, 56);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 26);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "0x00";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(67, 56);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(50, 26);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "0x01";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(123, 56);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(50, 26);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "0xFF";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(179, 56);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(123, 26);
-            this.button4.TabIndex = 6;
-            this.button4.Text = "Отправить 0x01";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(308, 58);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(58, 22);
-            this.textBox1.TabIndex = 7;
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.textBox3);
@@ -337,6 +337,14 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Приём";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(13, 23);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(419, 210);
+            this.textBox3.TabIndex = 1;
             // 
             // groupBox4
             // 
@@ -356,14 +364,6 @@
             this.textBox2.Size = new System.Drawing.Size(419, 55);
             this.textBox2.TabIndex = 0;
             // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(13, 23);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(419, 210);
-            this.textBox3.TabIndex = 1;
-            // 
             // Device01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -378,6 +378,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Device01";
             this.Text = "Device_01";
+            this.Load += new System.EventHandler(this.Device01_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
