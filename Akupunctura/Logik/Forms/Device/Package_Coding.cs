@@ -27,7 +27,6 @@ namespace Akupunctura.Logik.Forms.Device
         {
             GetInt(inp);
         }
-
         public package(int inp)
         {
             b = new bytes();
@@ -36,10 +35,7 @@ namespace Akupunctura.Logik.Forms.Device
         bool _isI = false;
         public bool IsI
         {
-            get
-            {
-                return _isI;
-            }
+            get { return _isI; }
         }
         bytes b;
         public int Int_pack
@@ -50,7 +46,6 @@ namespace Akupunctura.Logik.Forms.Device
         {
             get { return GetBytes(b.Int); }
         }
-
         void GetInt(byte[] inp_arr)
         {
             b = new bytes();
@@ -63,8 +58,6 @@ namespace Akupunctura.Logik.Forms.Device
             b.b2 |= (byte)((inp_arr[0] & 0x04) << 5);
             b.b1 |= (byte)((inp_arr[0] & 0x08) << 4);
             if ((inp_arr[0] & 0x20) != 0) _isI = true;
-
-            //return b.Int;
         }
 
         byte[] GetBytes(int input)
@@ -77,7 +70,6 @@ namespace Akupunctura.Logik.Forms.Device
             output[2] = (byte)(b.b2 & 0x7F | 0x80);
             output[3] = (byte)(b.b3 & 0x7F | 0x80);
             output[4] = (byte)(b.b4 & 0x7F | 0x80);
-
             return output;
         }
     }

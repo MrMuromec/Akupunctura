@@ -9,9 +9,13 @@ namespace Akupunctura.Logik
 {
   public class control_database // Управление базой
   {
+      /*
       private patient local_patient = new patient();
       private doctor local_doctor = new doctor();
       private measurement local_measument = new measurement();
+       * */
+      
+      // Переписать!!!
       public void MainForms(Akupunctura mainForm, string Name_form)
       {
           switch (Name_form)

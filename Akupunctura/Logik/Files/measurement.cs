@@ -8,11 +8,6 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class measurement
   {
-      public List<one_dimension> point = new List<one_dimension>();
+      public List<one_dimension> points = new List<one_dimension>();
   }
-    [NonSerialized]
-    static public class commands_measurement
-    {
-
-    }
 }
