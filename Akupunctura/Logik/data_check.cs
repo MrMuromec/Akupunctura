@@ -8,6 +8,7 @@ namespace Akupunctura.Logik
 {
     public class data_check // Управление данными
     {
+        public byte number_form;
         private patient local_patient = new patient();
         private doctor local_doctor = new doctor();
         private measurement local_mesument = new measurement();
@@ -15,5 +16,6 @@ namespace Akupunctura.Logik
         {
             local_mesument.put_dimension(Current,Voltage);
         }
+
     }
 }

@@ -378,6 +378,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Device01";
             this.Text = "Device_01";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Device01_FormClosed);
             this.Load += new System.EventHandler(this.Device01_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

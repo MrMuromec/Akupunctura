@@ -10,17 +10,24 @@ namespace Akupunctura.Logik
         public List<string> patients = new List<string>();
         public List<string> doctors = new List<string>();
         public List<string> mesuments = new List<string>();
-        private List<UInt16> numbers_form = new List<UInt16>();
+        private byte[] numbers_form = new byte[byte.MaxValue]; // ноль запрещён
 
         public void loading_patient() // Список пациентов
         {
             patients.Clear(); /// Дописать
         }
-        public UInt16 new_issue() // Номер data_check
+        public byte new_issue() // Номер data_check
         {
-            UInt16 N = numbers_form.Min();
-            for (; numbers_form.IndexOf(N)!=-1; N++) if (N == UInt16.MaxValue) N = 1;           
+            byte N =0;
+            for (byte i = 1; numbers_form[i] == i; i++) N = i;
+            if (N == byte.MaxValue) return 0;
+            N++;
+            numbers_form[N] = N;
             return N;
+        }
+        public void del_issue(byte N)
+        {
+            numbers_form[N] = 0;
         }
     }
 }

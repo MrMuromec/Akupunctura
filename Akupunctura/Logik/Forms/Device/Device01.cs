@@ -11,29 +11,30 @@ using Akupunctura.Logik;
 
 namespace Akupunctura.Logik.Forms.Device
 {
-  public partial class Device01 : Form
-  {
-    public Device01(Akupunctura mainForm, data_check parameters)
+    public partial class Device01 : Form
     {
-      InitializeComponent();
-    }
-
-    System.IO.Ports.SerialPort serialPort1 = new System.IO.Ports.SerialPort();
-    object sw_locker = new object();
-    byte[] tmp = new byte[5];
-    byte[] buf = new byte[5];
-    int n = 0;
-    int FileNum = 0;
-
-    void serialPort1_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
-    {
-        List<Int32> buffer = new List<Int32>();
-        try
+        System.IO.Ports.SerialPort serialPort1 = new System.IO.Ports.SerialPort();
+        object sw_locker = new object();
+        byte[] tmp = new byte[5];
+        byte[] buf = new byte[5];
+        int n = 0;
+        int FileNum = 0;
+        data_check data;
+        public Device01(Akupunctura mainForm, data_check parameters)
         {
-            byte[] b = new byte[serialPort1.BytesToRead];
-            serialPort1.Read(b, 0, b.Length);
-                for (int j = 0; j < b.Length; j++)
-                {
+            data = parameters;
+            InitializeComponent();
+        }
+
+        void serialPort1_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
+        {
+            List<Int32> buffer = new List<Int32>();
+            try
+            {
+                byte[] b = new byte[serialPort1.BytesToRead];
+                serialPort1.Read(b, 0, b.Length);
+                 for (int j = 0; j < b.Length; j++)
+                 {
                     if (b[j] == 0x0F)
                     {
                         continue;
@@ -83,9 +84,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
-        MessageBox.Show("AAAAAAAAAAAAAAAAAAAAAAAa");
     }
-     
 
     private void Disconnect_Click(object sender, EventArgs e)
     {
@@ -95,6 +94,11 @@ namespace Akupunctura.Logik.Forms.Device
     private void Connect_Click(object sender, EventArgs e)
     {
 
+    }
+
+    private void Device01_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        data.number_form = 0;
     }
   }
 }
