@@ -6,13 +6,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Akupunctura.Logik;
 
 
 namespace Akupunctura.Logik.Forms.Device
 {
   public partial class Device01 : Form
   {
-    public Device01(Akupunctura mainForm)
+    public Device01(Akupunctura mainForm, data_check parameters)
     {
       InitializeComponent();
     }
@@ -26,7 +27,6 @@ namespace Akupunctura.Logik.Forms.Device
 
     void serialPort1_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
     {
-        Boolean opening_records = false;
         List<Int32> buffer = new List<Int32>();
         try
         {
@@ -36,7 +36,6 @@ namespace Akupunctura.Logik.Forms.Device
                 {
                     if (b[j] == 0x0F)
                     {
-                        opening_records = true;
                         continue;
                     }
                     if (b[j] == 0x07)
@@ -67,7 +66,7 @@ namespace Akupunctura.Logik.Forms.Device
                                 {
                                     package p = new package(tmp);
                                     buffer.Add(p.Int_pack);
-                                    if (p.IsI) //control_database; Дописать!!!
+                                    if (p.IsI) ;////////////////////////////////////////
                                     n = 0;
                                 }
                                 continue;

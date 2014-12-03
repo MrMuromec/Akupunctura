@@ -50,7 +50,8 @@
     <Compile Include="Akupunctura.Designer.cs">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logik\control_database.cs" />
+    <Compile Include="Logik\control_forms.cs" />
+    <Compile Include="Logik\data_check.cs" />
     <Compile Include="Logik\Files\doctor.cs" />
     <Compile Include="Logik\Files\measurement.cs" />
     <Compile Include="Logik\Files\one_dimension.cs" />
@@ -63,6 +64,7 @@
       <DependentUpon>Device01.cs</DependentUpon>
     </Compile>
     <Compile Include="Logik\Forms\Device\Package_Coding.cs" />
+    <Compile Include="Logik\list_data.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Akupunctura.resx">

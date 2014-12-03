@@ -8,7 +8,13 @@ namespace Akupunctura.Logik.Files
 [Serializable]
     public class one_dimension
     {
-        public Int32 Current = 0;
-        public Int32 Voltage = 0;
+        private Int32 Current = 0;
+        private Int32 Voltage = 0;
+
+    public void put (Int32 current, Int32 voltage)
+        {
+        Current=current;
+        Voltage = voltage;
+        }
     }
 }

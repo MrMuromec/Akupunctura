@@ -12,7 +12,7 @@ namespace Akupunctura
 {
   public partial class Akupunctura : Form
   {
-    public control_database BD = new control_database(); // инициализация рабочей базы и логики работы
+    public control_forms BD = new control_forms(); // инициализация рабочей базы и логики работы
 
     public Akupunctura()
     {
