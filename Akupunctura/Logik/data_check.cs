@@ -8,7 +8,7 @@ namespace Akupunctura.Logik
 {
     public class data_check // Управление данными
     {
-        public byte number_form;
+        public byte number_form = 0;
         private patient local_patient = new patient();
         private doctor local_doctor = new doctor();
         private measurement local_mesument = new measurement();

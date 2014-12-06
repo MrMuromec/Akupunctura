@@ -84,6 +84,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
+        MessageBox.Show(data.number_form.ToString());
     }
 
     private void Disconnect_Click(object sender, EventArgs e)
