@@ -235,6 +235,7 @@
             this.button4.TabIndex = 6;
             this.button4.Text = "Отправить 0x01";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -347,6 +348,11 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(353, 55);
             this.textBox2.TabIndex = 0;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 2;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Device01
             // 

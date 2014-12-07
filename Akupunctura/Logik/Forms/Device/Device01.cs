@@ -160,5 +160,13 @@ namespace Akupunctura.Logik.Forms.Device
     {
         text_mesegbox(send(convert_A((byte)0xFF)));
     }
+    private void timer1_Tick(object sender, EventArgs e) // 0x01 по таймеру 
+    {
+        send(convert_A((byte)0x01));
+    }
+    private void button4_Click(object sender, EventArgs e)
+    {
+
+    }
   }
 }
