@@ -54,7 +54,6 @@
     <Compile Include="Logik\data_check.cs" />
     <Compile Include="Logik\Files\doctor.cs" />
     <Compile Include="Logik\Files\measurement.cs" />
-    <Compile Include="Logik\Files\one_dimension.cs" />
     <Compile Include="Logik\Files\patient.cs" />
     <Compile Include="Logik\Files\rights_doctor.cs" />
     <Compile Include="Logik\Forms\Device\Device01.cs">

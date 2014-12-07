@@ -30,8 +30,6 @@
     {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Disconnect = new System.Windows.Forms.Button();
-            this.Connect = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,6 +38,8 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.Disconnect = new System.Windows.Forms.Button();
+            this.Connect = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -49,21 +49,16 @@
             this.Send = new System.Windows.Forms.Button();
             this.cd_second = new System.Windows.Forms.ComboBox();
             this.cb_first = new System.Windows.Forms.ComboBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.Disconnect);
-            this.groupBox1.Controls.Add(this.Connect);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
@@ -72,35 +67,15 @@
             this.groupBox1.Controls.Add(this.comboBox3);
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.comboBox1);
-            this.groupBox1.Location = new System.Drawing.Point(16, 15);
+            this.groupBox1.Location = new System.Drawing.Point(3, 288);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(384, 241);
+            this.groupBox1.Size = new System.Drawing.Size(384, 162);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройки соединения";
-            // 
-            // Disconnect
-            // 
-            this.Disconnect.Location = new System.Drawing.Point(11, 197);
-            this.Disconnect.Margin = new System.Windows.Forms.Padding(4);
-            this.Disconnect.Name = "Disconnect";
-            this.Disconnect.Size = new System.Drawing.Size(355, 36);
-            this.Disconnect.TabIndex = 12;
-            this.Disconnect.Text = "Отключить";
-            this.Disconnect.UseVisualStyleBackColor = true;
-            // 
-            // Connect
-            // 
-            this.Connect.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Connect.Location = new System.Drawing.Point(11, 155);
-            this.Connect.Margin = new System.Windows.Forms.Padding(4);
-            this.Connect.Name = "Connect";
-            this.Connect.Size = new System.Drawing.Size(355, 32);
-            this.Connect.TabIndex = 11;
-            this.Connect.Text = "Подключить";
-            this.Connect.UseVisualStyleBackColor = true;
+            this.groupBox1.Visible = false;
             // 
             // label4
             // 
@@ -202,6 +177,30 @@
             this.comboBox1.Size = new System.Drawing.Size(221, 24);
             this.comboBox1.TabIndex = 0;
             // 
+            // Disconnect
+            // 
+            this.Disconnect.Enabled = false;
+            this.Disconnect.Location = new System.Drawing.Point(3, 248);
+            this.Disconnect.Margin = new System.Windows.Forms.Padding(4);
+            this.Disconnect.Name = "Disconnect";
+            this.Disconnect.Size = new System.Drawing.Size(384, 32);
+            this.Disconnect.TabIndex = 12;
+            this.Disconnect.Text = "Отключить";
+            this.Disconnect.UseVisualStyleBackColor = true;
+            this.Disconnect.Click += new System.EventHandler(this.Disconnect_Click_1);
+            // 
+            // Connect
+            // 
+            this.Connect.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.Connect.Location = new System.Drawing.Point(3, 208);
+            this.Connect.Margin = new System.Windows.Forms.Padding(4);
+            this.Connect.Name = "Connect";
+            this.Connect.Size = new System.Drawing.Size(384, 32);
+            this.Connect.TabIndex = 11;
+            this.Connect.Text = "Подключить";
+            this.Connect.UseVisualStyleBackColor = true;
+            this.Connect.Click += new System.EventHandler(this.Connect_Click_1);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textBox1);
@@ -212,7 +211,7 @@
             this.groupBox2.Controls.Add(this.Send);
             this.groupBox2.Controls.Add(this.cd_second);
             this.groupBox2.Controls.Add(this.cb_first);
-            this.groupBox2.Location = new System.Drawing.Point(16, 263);
+            this.groupBox2.Location = new System.Drawing.Point(3, 2);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
@@ -245,6 +244,7 @@
             this.button3.TabIndex = 5;
             this.button3.Text = "0xFF";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -254,6 +254,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "0x01";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -263,6 +264,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "0x00";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Send
             // 
@@ -328,30 +330,12 @@
             this.cb_first.Size = new System.Drawing.Size(50, 24);
             this.cb_first.TabIndex = 0;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.textBox3);
-            this.groupBox3.Location = new System.Drawing.Point(418, 15);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(444, 240);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Приём";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(13, 23);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(419, 210);
-            this.textBox3.TabIndex = 1;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBox2);
-            this.groupBox4.Location = new System.Drawing.Point(418, 263);
+            this.groupBox4.Location = new System.Drawing.Point(3, 105);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(444, 96);
+            this.groupBox4.Size = new System.Drawing.Size(384, 96);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Отпрака";
@@ -361,7 +345,7 @@
             this.textBox2.Location = new System.Drawing.Point(13, 26);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(419, 55);
+            this.textBox2.Size = new System.Drawing.Size(353, 55);
             this.textBox2.TabIndex = 0;
             // 
             // Device01
@@ -370,9 +354,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(880, 368);
+            this.ClientSize = new System.Drawing.Size(400, 459);
+            this.Controls.Add(this.Disconnect);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.Connect);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -384,8 +369,6 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -414,8 +397,6 @@
     private System.Windows.Forms.Button button3;
     private System.Windows.Forms.Button button2;
     private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.GroupBox groupBox3;
-    private System.Windows.Forms.TextBox textBox3;
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.TextBox textBox2;
     private System.Windows.Forms.Timer timer1;

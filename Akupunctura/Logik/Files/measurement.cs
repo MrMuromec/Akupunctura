@@ -8,13 +8,13 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class measurement
   {
-      private List<one_dimension> points = new List<one_dimension>();
-      one_dimension p = new one_dimension();
+      private List<Int32> Currents = new List<Int32>();
+      private List<Int32> Voltages = new List<Int32>();
 
       public void put_dimension(Int32 Current, Int32 Voltage)
       {
-          p.put (Current,Voltage);
-          points.Add(p);
+          Currents.Add(Current);
+          Voltages.Add(Voltage);
       }
   }
 }

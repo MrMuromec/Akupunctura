@@ -14,7 +14,7 @@ namespace Akupunctura.Logik
 
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
-          Number = numbering();
+          Number = numbering();  // Поиск позиций
           if (Number == 0) return false;
           else
           {
@@ -37,7 +37,7 @@ namespace Akupunctura.Logik
           byte position = 0;
           byte Max_position = 0;
           for (byte i = 1; i <= data_forms.Count; i++)
-              if (data_forms.FindLastIndex(delegate(data_check bk) { return bk.number_form == i; }) == -1) // Проверка занятости номеров
+              if (data_forms.FindIndex(delegate(data_check bk) { return bk.number_form == i; }) == -1) // Проверка занятости номеров
               {
                   position = i; // Записываем свободный
                   break;

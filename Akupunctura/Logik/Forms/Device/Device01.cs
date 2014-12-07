@@ -20,6 +20,7 @@ namespace Akupunctura.Logik.Forms.Device
         int n = 0;
         int FileNum = 0;
         data_check data;
+        Int32[] point_CV = new Int32[2];
         public Device01(Akupunctura mainForm, data_check parameters)
         {
             data = parameters;
@@ -28,7 +29,6 @@ namespace Akupunctura.Logik.Forms.Device
 
         void serialPort1_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
         {
-            List<Int32> buffer = new List<Int32>();
             try
             {
                 byte[] b = new byte[serialPort1.BytesToRead];
@@ -37,6 +37,7 @@ namespace Akupunctura.Logik.Forms.Device
                  {
                     if (b[j] == 0x0F)
                     {
+                        FileNum++;
                         continue;
                     }
                     if (b[j] == 0x07)
@@ -66,8 +67,15 @@ namespace Akupunctura.Logik.Forms.Device
                                 if (n == 5)
                                 {
                                     package p = new package(tmp);
-                                    buffer.Add(p.Int_pack);
-                                    if (p.IsI) ;////////////////////////////////////////
+                                    if (p.IsI)
+                                    {
+                                        point_CV[1] = p.Int_pack;
+                                        data.put_point(point_CV[0], point_CV[1]);
+                                    }
+                                    else
+                                    {
+                                        point_CV[0] = p.Int_pack;
+                                    }
                                     n = 0;
                                 }
                                 continue;
@@ -84,22 +92,73 @@ namespace Akupunctura.Logik.Forms.Device
     }
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
-        MessageBox.Show(data.number_form.ToString());
+        //MessageBox.Show(data.number_form.ToString());
     }
-
-    private void Disconnect_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void Connect_Click(object sender, EventArgs e)
-    {
-
-    }
-
     private void Device01_FormClosed(object sender, FormClosedEventArgs e)
     {
         data.number_form = 0;
+    }
+    private void Connect_Click_1(object sender, EventArgs e) // Подключение
+    {
+        try
+        {
+            serialPort1.Open();
+            if (serialPort1.IsOpen)
+            {
+                groupBox2.Visible = groupBox4.Visible = true;
+                Connect.Enabled = false;
+                Disconnect.Enabled = true;
+            }
+        }
+        catch (Exception e1)
+        {
+            MessageBox.Show(e1.Message, "Error_Button_Click");
+        }
+    }
+    private void Disconnect_Click_1(object sender, EventArgs e) // Выключение
+    {
+    try
+            {
+                serialPort1.Close();
+                if (!serialPort1.IsOpen)
+                {
+                    Connect.Enabled = true;
+                    Disconnect.Enabled = false;
+                    groupBox2.Visible = groupBox4.Visible = false;
+                }
+            }
+    catch (Exception e2)
+    {
+        MessageBox.Show(e2.Message , "Button_Click_1");
+    }
+    }
+    private byte[] convert_A(byte A) // Перевод в массив
+    {
+        byte[] a = { A };
+        return a;
+    }
+    private byte[] send(byte[] a) // Отправка
+    {
+        serialPort1.Write(a, 0, a.Length);
+        return a;
+    }
+    private void text_mesegbox (byte[] a) // Отображение
+    {
+        textBox2.Text += " " + a.ToString();
+    }
+    private void button1_Click(object sender, EventArgs e) // 0x00
+    {
+        text_mesegbox(send(convert_A((byte)0x00)));
+    }
+
+    private void button2_Click(object sender, EventArgs e) // 0x01
+    {
+        text_mesegbox(send(convert_A((byte)0x01)));
+    }
+
+    private void button3_Click(object sender, EventArgs e) // 0xFF
+    {
+        text_mesegbox(send(convert_A((byte)0xFF)));
     }
   }
 }
