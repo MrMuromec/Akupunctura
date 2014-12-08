@@ -9,7 +9,6 @@ namespace Akupunctura.Logik
   public class control_forms // Управление дочерними формами
   {
       private List<data_check> data_forms = new List<data_check>();
-      private list_data lists = new list_data();
       private byte Number;
 
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же

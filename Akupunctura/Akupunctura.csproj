@@ -63,7 +63,6 @@
       <DependentUpon>Device01.cs</DependentUpon>
     </Compile>
     <Compile Include="Logik\Forms\Device\Package_Coding.cs" />
-    <Compile Include="Logik\list_data.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Akupunctura.resx">

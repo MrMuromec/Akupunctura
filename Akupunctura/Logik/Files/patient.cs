@@ -8,5 +8,6 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class patient
   {
+      private DateTime id_patient;
   }
 }
