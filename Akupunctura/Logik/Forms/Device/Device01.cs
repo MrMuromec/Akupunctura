@@ -8,6 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using Akupunctura.Logik;
 
+using System.Windows;
+using System.Threading;
+using System.IO.Ports;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Akupunctura.Logik.Forms.Device
 {
@@ -21,6 +26,7 @@ namespace Akupunctura.Logik.Forms.Device
         int FileNum = 0;
         data_check data;
         Int32[] point_CV = new Int32[2];
+        bool pressure_timer = false;
         public Device01(Akupunctura mainForm, data_check parameters)
         {
             data = parameters;
@@ -92,7 +98,31 @@ namespace Akupunctura.Logik.Forms.Device
     }
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
-        //MessageBox.Show(data.number_form.ToString());
+        try
+        {
+            string[] availablePorts = SerialPort.GetPortNames();
+            foreach (string port in availablePorts)
+            {
+                comboBox1.Items.Add(port);
+            }
+            comboBox1.SelectedIndex = 0;
+            string str = comboBox1.SelectedItem.ToString();
+            if (str != "")
+            {
+                serialPort1.PortName = str;
+            }
+            serialPort1.StopBits = StopBits.One;
+            serialPort1.DataBits = 8;
+            serialPort1.BaudRate = 921600;
+            serialPort1.Parity = Parity.None;
+            serialPort1.ReceivedBytesThreshold = 100;
+            serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
+            groupBox1.Enabled = groupBox2.Enabled = groupBox4.Enabled = true;
+        }
+        catch (Exception e9)
+        {
+            MessageBox.Show(e9.Message, "Window_Loaded");
+        }
     }
     private void Device01_FormClosed(object sender, FormClosedEventArgs e)
     {
@@ -146,16 +176,18 @@ namespace Akupunctura.Logik.Forms.Device
     {
         textBox2.Text += " " + a.ToString();
     }
+    private void text_mesegbox(byte[] a,string b) // Отображение
+    {
+        textBox2.Text += " " + a.ToString() + "*" + b;
+    }
     private void button1_Click(object sender, EventArgs e) // 0x00
     {
         text_mesegbox(send(convert_A((byte)0x00)));
     }
-
     private void button2_Click(object sender, EventArgs e) // 0x01
     {
         text_mesegbox(send(convert_A((byte)0x01)));
     }
-
     private void button3_Click(object sender, EventArgs e) // 0xFF
     {
         text_mesegbox(send(convert_A((byte)0xFF)));
@@ -164,9 +196,69 @@ namespace Akupunctura.Logik.Forms.Device
     {
         send(convert_A((byte)0x01));
     }
-    private void button4_Click(object sender, EventArgs e)
+    private void button4_Click(object sender, EventArgs e) // Пуск таймера для множественной отправки 0х01
     {
+        if (!pressure_timer)
+        {
+            text_mesegbox(convert_A((byte)0x01), textBox1.Text);
+            timer1.Start();
+        }
+        else
+        {
+            timer1.Stop();
+        }
+        pressure_timer = !pressure_timer;
+    }
+    private void Send_Click(object sender, EventArgs e) // Отправка произвольного заданного значения
+    {
+        text_mesegbox(send(convert_A(Convert.ToByte(cb_first.Text+cd_second.Text, 16))));
+    }
+    private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) // Выбор скорочти
+    {
+        if (comboBox2.Text != "")
+        {
+            serialPort1.BaudRate = Int32.Parse(comboBox2.Text);
+        }
+    }
+    private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) // Выбор паритета
+    {
+        try
+        {
+            switch (comboBox3.SelectedIndex)
+            {
+                case 0: serialPort1.Parity = Parity.None; break;
+                case 1: serialPort1.Parity = Parity.Even; break;
+                case 2: serialPort1.Parity = Parity.Odd; break;
+                case 3: serialPort1.Parity = Parity.None; break;
+                default: break;
 
+            }
+        }
+        catch (Exception e6)
+        {
+            MessageBox.Show("comboBox4_SelectionChanged" + e6.Message);
+        }
+    }
+    private void comboBox4_SelectedIndexChanged(object sender, EventArgs e) // Выбор стоповых битов
+    {
+        try
+        {
+            switch (comboBox4.SelectedIndex)
+            {
+                case 0: serialPort1.StopBits = StopBits.One; break;
+                case 1: serialPort1.StopBits = StopBits.OnePointFive; break;
+                case 2: serialPort1.StopBits = StopBits.Two; break;
+                default: break;
+            }
+        }
+        catch (Exception e8)
+        {
+            MessageBox.Show("comboBox5_SelectionChanged" + e8.Message);
+        }
+    }
+    private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) // Выбор порта
+    {
+        serialPort1.PortName = comboBox1.SelectedItem.ToString();
     }
   }
 }

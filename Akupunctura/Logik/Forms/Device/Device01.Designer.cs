@@ -67,6 +67,7 @@
             this.groupBox1.Controls.Add(this.comboBox3);
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(3, 288);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
@@ -122,13 +123,15 @@
             this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Items.AddRange(new object[] {
-            "1",
-            "2"});
+            "1.0",
+            "1.5",
+            "2.0"});
             this.comboBox4.Location = new System.Drawing.Point(145, 123);
             this.comboBox4.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(221, 24);
             this.comboBox4.TabIndex = 3;
+            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
             // 
             // comboBox3
             // 
@@ -144,6 +147,7 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(221, 24);
             this.comboBox3.TabIndex = 2;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // comboBox2
             // 
@@ -166,6 +170,7 @@
             this.comboBox2.Size = new System.Drawing.Size(221, 24);
             this.comboBox2.Sorted = true;
             this.comboBox2.TabIndex = 1;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // comboBox1
             // 
@@ -176,6 +181,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(221, 24);
             this.comboBox1.TabIndex = 0;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // Disconnect
             // 
@@ -211,6 +217,7 @@
             this.groupBox2.Controls.Add(this.Send);
             this.groupBox2.Controls.Add(this.cd_second);
             this.groupBox2.Controls.Add(this.cb_first);
+            this.groupBox2.Enabled = false;
             this.groupBox2.Location = new System.Drawing.Point(3, 2);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
@@ -276,6 +283,7 @@
             this.Send.TabIndex = 2;
             this.Send.Text = "Отправить";
             this.Send.UseVisualStyleBackColor = true;
+            this.Send.Click += new System.EventHandler(this.Send_Click);
             // 
             // cd_second
             // 
@@ -334,6 +342,7 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBox2);
+            this.groupBox4.Enabled = false;
             this.groupBox4.Location = new System.Drawing.Point(3, 105);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(384, 96);
