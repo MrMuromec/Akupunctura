@@ -10,15 +10,15 @@ namespace Akupunctura.Logik.Files
   {
       private List<Int32> Currents = new List<Int32>();
       private List<Int32> Voltages = new List<Int32>();
-      private Int64 id_doctor = 0;
-      private Int64 id_patient = 0;
+      private DateTime id_doctor;
+      private DateTime id_patient;
 
       public void put_dimension(Int32 Current, Int32 Voltage)
       {
           Currents.Add(Current);
           Voltages.Add(Voltage);
       }
-      public void save_mesurement(Int64 id_d, Int64 id_p)
+      public void save_mesurement(DateTime id_d, DateTime id_p)
       {
           id_doctor = id_d;
           id_patient = id_p;

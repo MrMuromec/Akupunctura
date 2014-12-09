@@ -10,20 +10,27 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class doctor
   {
-      private rights_doctor local_rights = new rights_doctor(); // На будущее (разрешение действий для различных учётных записей)
+      private rights_doctor local_rights ; // На будущее (разрешение действий для различных учётных записей)
       private DateTime id_doctor; // Дата создания записи
-      private string[] FIO = new string[3];
+      private List<string> FIO = new List<string>();
       private string file_name;
 
-
-      public void save_doctor (doctor doc) // Первое сохранение
+      private void save(doctor doc, string address) // Бинарная сериализация
       {
-          id_doctor = DateTime.UtcNow; // Пишется по мировому времени 
           BinaryFormatter formatter = new BinaryFormatter();
-          using (FileStream fs = new FileStream(file_name, FileMode.OpenOrCreate))
+          using (FileStream fs = new FileStream(address + file_name, FileMode.OpenOrCreate))
           {
               formatter.Serialize(fs, doc);
           }
+      }
+      public void save_doctor(doctor doc, List<string> fio, string address) // Сохранение
+      {
+          if (FIO.Count==0) id_doctor = DateTime.UtcNow; // Пишется по мировому времени
+          FIO = fio;
+          save(doc,address);
+      }
+      public void open_doctor(doctor doc)
+      {
       }
   }
 }

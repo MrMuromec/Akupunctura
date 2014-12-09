@@ -142,7 +142,8 @@ namespace Akupunctura.Logik.Forms.Device
         }
         catch (Exception e1)
         {
-            MessageBox.Show(e1.Message, "Error_Button_Click");
+            //groupBox1.Enabled = true;
+            MessageBox.Show(e1.Message, "Error_Button_Click");            
         }
     }
     private void Disconnect_Click_1(object sender, EventArgs e) // Выключение
@@ -174,7 +175,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void text_mesegbox (byte[] a) // Отображение
     {
-        textBox2.Text += " " + a.ToString();
+        textBox2.Text += " " + a[0].ToString();
     }
     private void text_mesegbox(byte[] a,string b) // Отображение
     {
