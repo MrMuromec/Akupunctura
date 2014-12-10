@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Akupunctura.Logik.Files
 {
-  [Serializable]
   public class measurement
   {
       private List<Int32> Currents = new List<Int32>();

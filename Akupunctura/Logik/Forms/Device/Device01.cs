@@ -33,7 +33,7 @@ namespace Akupunctura.Logik.Forms.Device
             InitializeComponent();
         }
 
-        void serialPort1_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
+        void serialPort_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
         {
             try
             {
@@ -109,15 +109,15 @@ namespace Akupunctura.Logik.Forms.Device
             string str = comboBox1.SelectedItem.ToString();
             if (str != "")
             {
-                serialPort1.PortName = str;
+              serialPort1.PortName = str;
             }
             serialPort1.StopBits = StopBits.One;
             serialPort1.DataBits = 8;
             serialPort1.BaudRate = 921600;
             serialPort1.Parity = Parity.None;
             serialPort1.ReceivedBytesThreshold = 100;
-            serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
-            groupBox1.Enabled = groupBox2.Enabled = groupBox4.Enabled = true;
+            serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
+            groupBox1.Enabled = groupBox4.Enabled = true;
         }
         catch (Exception e9)
         {
@@ -126,6 +126,8 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void Device01_FormClosed(object sender, FormClosedEventArgs e)
     {
+        timer1.Stop();
+        Disconnect_Click_1(sender,e);
         data.number_form = 0;
     }
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
@@ -133,12 +135,15 @@ namespace Akupunctura.Logik.Forms.Device
         try
         {
             serialPort1.Open();
+            groupBox2.Enabled = true;
             if (serialPort1.IsOpen)
             {
-                groupBox2.Visible = groupBox4.Visible = true;
+                groupBox4.Visible = true;
                 Connect.Enabled = false;
                 Disconnect.Enabled = true;
             }
+            textBox1.Text = "200";
+            textBox2.Clear();
         }
         catch (Exception e1)
         {
@@ -151,11 +156,12 @@ namespace Akupunctura.Logik.Forms.Device
     try
             {
                 serialPort1.Close();
+                groupBox2.Enabled = false;
                 if (!serialPort1.IsOpen)
                 {
                     Connect.Enabled = true;
                     Disconnect.Enabled = false;
-                    groupBox2.Visible = groupBox4.Visible = false;
+                    groupBox4.Visible = false;
                 }
             }
     catch (Exception e2)
@@ -179,7 +185,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void text_mesegbox(byte[] a,string b) // Отображение
     {
-        textBox2.Text += " " + a.ToString() + "*" + b;
+        textBox2.Text += " " + a[0].ToString() + "*" + b;
     }
     private void button1_Click(object sender, EventArgs e) // 0x00
     {
