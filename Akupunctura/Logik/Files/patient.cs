@@ -13,22 +13,41 @@ namespace Akupunctura.Logik.Files
       private DateTime id_patient;// Дата создания записи
       private DateTime data_patient; // Дата рождения 
       private List<string> FIO = new List<string>();
-      private string file_name;
 
-      private void save(patient pat, string address)  // Бинарная сериализация
+      public List<string> read(string parameter) // Чтение
       {
-          BinaryFormatter formatter = new BinaryFormatter();
-          using (FileStream fs = new FileStream(file_name, FileMode.OpenOrCreate))
+          parameter.ToLower();
+          List<string> str = new List<string>();
+          switch (parameter)
           {
-              formatter.Serialize(fs, pat);
+              case "id":
+                  {
+                      str.Add(id_patient.ToString());
+                      break;
+                  }
+              case "fio":
+                  {
+                      str.AddRange(FIO);
+                      break;
+                  }
+              case "data":
+                  {
+                      str.Add(data_patient.ToString());
+                      break;
+                  }
+              default:
+                  break;
           }
+          return str;
       }
-      public void save_patient(patient pat, List<string> fio, Int32[] d, string address) // Сохранение
+
+      public bool record(List<string> fio, DateTime data) // Запись
       {
-          if (FIO.Count == 0) id_patient= DateTime.UtcNow; // Пишется по мировому времени
+          if (fio.Count == 0) return false;
+          if (FIO.Count == 0) id_patient = DateTime.UtcNow; // Пишется по мировому времени
           FIO = fio;
-          data_patient = new DateTime(d[0], d[1], d[2]); // Год, месяц, день
-          save(pat,address);
+          data_patient = data;
+          return true;
       }
   }
 }

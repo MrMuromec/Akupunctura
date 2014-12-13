@@ -2,35 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Akupunctura.Logik.Files
 {
   [Serializable]
   public class doctor
   {
-      private rights_doctor local_rights ; // На будущее (разрешение действий для различных учётных записей)
       private DateTime id_doctor; // Дата создания записи
       private List<string> FIO = new List<string>();
-      private string file_name;
 
-      private void save(doctor doc, string address) // Бинарная сериализация
+      public List<string> read(string parameter) // Чтение
       {
-          BinaryFormatter formatter = new BinaryFormatter();
-          using (FileStream fs = new FileStream(address + file_name, FileMode.OpenOrCreate))
+          parameter.ToLower();
+          List<string> str = new List<string>();
+          switch (parameter)
           {
-              formatter.Serialize(fs, doc);
+              case "id":
+                  {
+                      str.Add(id_doctor.ToString());
+                      break;
+                  }
+              case "fio":
+                  {
+                      str.AddRange(FIO);
+                      break;
+                  }
+              default:
+                  break;
           }
+          return str;
       }
-      public void save_doctor(doctor doc, List<string> fio, string address) // Сохранение
+
+      public bool record(List<string> fio) // Запись
       {
-          if (FIO.Count==0) id_doctor = DateTime.UtcNow; // Пишется по мировому времени
+          if (fio.Count == 0) return false;
+          if (FIO.Count == 0) id_doctor = DateTime.UtcNow; // Пишется по мировому времени
           FIO = fio;
-          save(doc,address);
-      }
-      public void open_doctor(doctor doc)
-      {
+          return true;
       }
   }
 }

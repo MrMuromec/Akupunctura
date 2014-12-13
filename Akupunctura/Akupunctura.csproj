@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="Logik\control_forms.cs" />
     <Compile Include="Logik\data_check.cs" />
+    <Compile Include="Logik\Files\commands.cs" />
     <Compile Include="Logik\Files\doctor.cs" />
     <Compile Include="Logik\Files\measurement.cs" />
     <Compile Include="Logik\Files\patient.cs" />
