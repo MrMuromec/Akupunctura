@@ -15,7 +15,7 @@ namespace Akupunctura
     public control_forms BD = new control_forms(); // инициализация рабочей базы и логики работы
 
     public Akupunctura()
-    {
+    {  
       InitializeComponent();
     }
 

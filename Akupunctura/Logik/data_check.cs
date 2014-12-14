@@ -12,9 +12,14 @@ namespace Akupunctura.Logik
         private patient local_patient = new patient();
         private doctor local_doctor = new doctor();
         private measurement local_mesument = new measurement();
+        private commands Command;
         public void put_point(Int32 Current, Int32 Voltage)
         {
             local_mesument.put_dimension(Current,Voltage);
+        }
+        public void all_command(commands com) // Общий список команд
+        {
+            Command = com;
         }
 
     }

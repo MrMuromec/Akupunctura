@@ -8,5 +8,6 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class rights_doctor
   {
+      // Дописать
   }
 }

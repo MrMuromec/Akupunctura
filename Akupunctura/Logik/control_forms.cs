@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Akupunctura.Logik.Forms.Device;
+using Akupunctura.Logik.Files;
 
 namespace Akupunctura.Logik
 {
   public class control_forms // Управление дочерними формами
   {
-      private List<data_check> data_forms = new List<data_check>();
-      private byte Number;
+      private commands command = new commands();
+      private List<data_check> data_forms = new List<data_check>(); // Список управления данных
+      private byte Number;      
 
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
+          if (data_forms.Count == 0) command.loading_BD(mainForm.BD); // Что бы из команд можно было вызвать control_forms
           Number = numbering();  // Поиск позиций
           if (Number == 0) return false;
           else
@@ -25,8 +28,10 @@ namespace Akupunctura.Logik
                           Device01 device01 = new Device01(mainForm, data_forms[Number - 1]);
                           device01.MdiParent = mainForm;
                           device01.Show();
+                          break;
                       }
-                      break;
+                  default: break; // ошибочное название
+                      
               }
               return true;
           }
@@ -53,6 +58,7 @@ namespace Akupunctura.Logik
               {
                   position = (byte)(Max_position + 1);
                   data_forms.Add(new data_check());
+                  data_forms[data_forms.Count - 1].all_command(command); // Один список команд на всех
               }
           }
           return position;

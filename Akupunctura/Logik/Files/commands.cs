@@ -7,8 +7,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Akupunctura.Logik.Files
 {
-    class commands
+    public class commands
     {
+        control_forms BD;
+        public void loading_BD(control_forms bd)
+        {
+            BD = bd;
+        }
         public void save_ (doctor doc, string str) // Сохранение
         {
             BinaryFormatter formatter = new BinaryFormatter();
