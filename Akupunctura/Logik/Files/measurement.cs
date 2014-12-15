@@ -17,6 +17,24 @@ namespace Akupunctura.Logik.Files
           Currents.Add(Current);
           Voltages.Add(Voltage);
       }
+      public List<Int32> open_dimension (string str)
+      {          
+          switch (str)
+          {
+              case "currents":
+                  {
+                      return Currents;
+                  }
+              case "voltages":
+                  {
+                      return Voltages;
+                  }
+              default:
+                  {
+                      return new List<Int32>();
+                  }
+          }
+      }
       public void save_mesurement(string id_d,string id_p)
       {
           id_doctor = id_d;

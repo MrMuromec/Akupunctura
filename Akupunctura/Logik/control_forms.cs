@@ -15,8 +15,7 @@ namespace Akupunctura.Logik
 
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
-          if (data_forms.Count == 0) command.loading_BD(mainForm.BD); // Что бы из команд можно было вызвать control_forms
-          Number = numbering();  // Поиск позиций
+          Number = numbering(mainForm);  // Поиск позиций
           if (Number == 0) return false;
           else
           {
@@ -36,7 +35,7 @@ namespace Akupunctura.Logik
               return true;
           }
       }
-      private byte numbering() // Поиск позиций
+      private byte numbering(Akupunctura mainForm) // Поиск позиций
       {
           byte position = 0;
           byte Max_position = 0;
@@ -58,7 +57,7 @@ namespace Akupunctura.Logik
               {
                   position = (byte)(Max_position + 1);
                   data_forms.Add(new data_check());
-                  data_forms[data_forms.Count - 1].all_command(command); // Один список команд на всех
+                  data_forms[data_forms.Count - 1].all_db(mainForm.BD); // Все данные получаю доступ к базе данных (data_check содержит control_forms)
               }
           }
           return position;
