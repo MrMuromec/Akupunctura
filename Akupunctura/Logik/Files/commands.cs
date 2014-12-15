@@ -10,32 +10,28 @@ namespace Akupunctura.Logik.Files
     public class commands
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        int FileNum = 0;
-        StreamWriter sw;
-        object sw_locker = new object();
-        FileInfo fi;
 
         public void save_(measurement meas, string str) // Сохранение
         {
             List<Int32> C = meas.open_dimension("currents");
             List<Int32> V = meas.open_dimension("voltages");
-            lock (sw_locker)
+            try
             {
-                fi = new FileInfo(".txt");
-                FileNum++;
-                sw = fi.AppendText();
+                StreamWriter sw = new StreamWriter(str + ".txt");
+                for (int i = 0; i < C.Count(); i++)
+                    sw.WriteLine(" " + C[i].ToString() + " " + V[i].ToString()); // А потому что так было раньше, но не совсем так
+                sw.Close();
             }
-            for (int i = 0; i < C.Count();i++ ) 
-                SetText(" " + C[i].ToString() + " " + V[i].ToString() + "\r\n");
-        }
-        private void SetText(string text)
-        {
-            lock (sw_locker)
+            catch (Exception e)
             {
-                sw.Write(text);
-                sw.Flush();
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
             }
         }
+
         public void save_ (doctor doc, string str) // Сохранение
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
@@ -52,6 +48,31 @@ namespace Akupunctura.Logik.Files
                 formatter.Serialize(f,rig);
         }
 
+
+        public measurement loading_(measurement meas, string str) // Загрузка
+        {
+            String line;
+            try
+            {
+                StreamReader sr = new StreamReader(str + ".txt");
+                line = sr.ReadLine();
+                while (line != null)
+                {
+                    meas.put_dimension(Convert.ToInt32(line.Split(' ')[1]), Convert.ToInt32(line.Split(' ')[2])); // Разбор типизированного файла
+                    line = sr.ReadLine();
+                }
+                sr.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+            return meas;
+        }
         public doctor loading_(doctor doc, string str) // Загрузка
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
