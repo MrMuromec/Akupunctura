@@ -35,7 +35,7 @@ namespace Akupunctura.Logik.Files
                   }
           }
       }
-      public void save_mesurement(string id_d,string id_p)
+      public void save_mesurement_id(string id_d,string id_p)
       {
           id_doctor = id_d;
           id_patient = id_p;

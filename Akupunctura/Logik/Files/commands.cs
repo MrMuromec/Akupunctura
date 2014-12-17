@@ -11,7 +11,12 @@ namespace Akupunctura.Logik.Files
     {
         BinaryFormatter formatter = new BinaryFormatter();
 
-        public void save_(measurement meas, string str) // Сохранение
+        public void savr_bd(string Address, data_check Data, string save_parameter) // Сохранения в БД
+        {
+            const string Doc = "doctors", Pat = "patients", Meas = "measurements", Rig = "rights_doctor"; // Имена директорий
+        }
+
+        public void save_(measurement meas, string str) // Сохранение 
         {
             List<Int32> C = meas.open_dimension("currents");
             List<Int32> V = meas.open_dimension("voltages");
@@ -31,7 +36,6 @@ namespace Akupunctura.Logik.Files
                 Console.WriteLine("Executing finally block.");
             }
         }
-
         public void save_ (doctor doc, string str) // Сохранение
         {
             using (FileStream f = new FileStream(str, FileMode.Create))

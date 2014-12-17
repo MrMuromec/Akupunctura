@@ -9,9 +9,10 @@ namespace Akupunctura.Logik
 {
   public class control_forms // Управление дочерними формами
   {
-      private commands command = new commands();
+      private commands command = new commands(); // Команды
       private List<data_check> data_forms = new List<data_check>(); // Список управления данных
-      private byte Number;      
+      private byte Number;
+      private string address = Environment.CurrentDirectory; // По началу там где лежит exe (Адрес папки с бд)
 
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
