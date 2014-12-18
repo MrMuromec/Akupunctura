@@ -13,10 +13,36 @@ namespace Akupunctura.Logik.Files
 
         public void savr_bd(string Address, data_check Data, string save_parameter) // Сохранения в БД
         {
-            const string Doc = "doctors", Pat = "patients", Meas = "measurements", Rig = "rights_doctor"; // Имена директорий
+            const string Doc = "doctor", Pat = "patient", Meas = "measurement", Rig = "rights_docto"; // Имена директорий
+            List<string> symbol = new List<string>(save_parameter.Split(' '));
+            for (int i = symbol.Count(); i>-1; i--)
+            {
+              switch (symbol[i].ToLower())
+              {
+                case Doc:
+                  {
+                    save_(Data.local_doctor,Address + @"\" + Doc + @"\" + Data.local_doctor.read("id") + ".txt");
+                    break;
+                  }
+                case Pat:
+                  {
+                    save_(Data.local_patient, Address + @"\" + Pat + @"\" + Data.local_patient.read("id") + ".txt");
+                    break;
+                  }
+                case Meas:
+                  {
+                    break;
+                  }
+                case Rig:
+                  {
+                    break;
+                  }
+                default: break; // ошибочное название
+              }
+            }
         }
 
-        public void save_(measurement meas, string str) // Сохранение 
+        private void save_(measurement meas, string str) // Сохранение 
         {
             List<Int32> C = meas.open_dimension("currents");
             List<Int32> V = meas.open_dimension("voltages");
@@ -36,17 +62,17 @@ namespace Akupunctura.Logik.Files
                 Console.WriteLine("Executing finally block.");
             }
         }
-        public void save_ (doctor doc, string str) // Сохранение
+        private void save_(doctor doc, string str) // Сохранение
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 formatter.Serialize(f, doc);
         }
-        public void save_(patient pat, string str) // Сохранение
+        private void save_(patient pat, string str) // Сохранение
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 formatter.Serialize(f,pat);
         }
-        public void save_(rights_doctor rig, string str) // Сохранение
+        private void save_(rights_doctor rig, string str) // Сохранение
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 formatter.Serialize(f,rig);
