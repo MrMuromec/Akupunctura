@@ -14,6 +14,24 @@ namespace Akupunctura.Logik.Files
       private DateTime data_patient; // Дата рождения 
       private List<string> FIO = new List<string>();
 
+      public void clean() // Чистка
+      {
+          FIO.Clear();
+          // А вот с датой хз
+      }
+      public List<string> read_fio() // Чтение
+      {
+          return FIO;
+      }
+      public string read_id() // Чтение
+      {
+          return id_patient.ToString();
+      }
+      public string read_data() // Чтение
+      {
+          return data_patient.ToString();
+      }
+      /*
       public List<string> read(string parameter) // Чтение
       {
           parameter.ToLower();
@@ -40,8 +58,8 @@ namespace Akupunctura.Logik.Files
           }
           return str;
       }
-
-      public bool record(List<string> fio, DateTime data) // Запись
+      */
+      public bool record(List<string> fio, DateTime data) // Запись !!!!!!!!!!!!!!!!! Править!
       {
           if (fio.Count == 0) return false;
           if (FIO.Count == 0) id_patient = DateTime.UtcNow; // Пишется по мировому времени

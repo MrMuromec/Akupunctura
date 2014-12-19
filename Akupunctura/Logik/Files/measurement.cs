@@ -12,6 +12,12 @@ namespace Akupunctura.Logik.Files
       private string  id_doctor;
       private string id_patient;
 
+      public void clean() // Чистка
+      {
+          Currents.Clear();
+          Voltages.Clear();
+          id_doctor = id_patient = "";
+      }
       public void put_dimension(Int32 Current, Int32 Voltage) // Загрузка по точкам
       {
           Currents.Add(Current);
@@ -19,51 +25,33 @@ namespace Akupunctura.Logik.Files
       }
       public void put_dimension(List<Int32> Current, List<Int32> Voltage) // Загрузка
       {
-        Currents.Clear();
-        Currents.Concat(Current);
-        Voltages.Clear();
-        Voltages.Concat(Current);
+          clean();
+          Currents.Concat(Current);
+          Voltages.Concat(Current);
       }
-      public List<Int32> open_dimension (string str) // чтение измерений
-      {          
-          switch (str.ToLower())
-          {
-              case "currents":
-                  {
-                      return Currents;
-                  }
-              case "voltages":
-                  {
-                      return Voltages;
-                  }
-              default:
-                  {
-                      return new List<Int32>();
-                  }
-          }
+      public List<Int32> open_current() // Открытие
+      {
+          return Currents;
       }
-      public void save_mesurement_id(string id_d,string id_p) // сохранение id
+      public List<Int32> open_voltage() // Открытие
+      {
+          return Voltages;
+      }
+      public void save_id_doctor(string id_d) // сохранение id
       {
           id_doctor = id_d;
+      }
+      public void save_id_patient(string id_p) // сохранение id
+      {
           id_patient = id_p;
       }
-      public string open_measurement_id(string str) // чтение id
+      public string open_id_doctor() // Чтение id
       {
-        switch (str.ToLower())
-        {
-          case "doctor":
-            {
-              return id_doctor;
-            }
-          case "patient":
-            {
-              return id_patient;
-            }
-          default:
-            {
-              return "";
-            }
-        }
+          return id_doctor;
+      }
+      public string open_id_patient() // Чтение id
+      {
+          return id_patient;
       }
 
   }

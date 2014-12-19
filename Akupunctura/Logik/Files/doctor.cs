@@ -11,28 +11,35 @@ namespace Akupunctura.Logik.Files
       private DateTime id_doctor; // Дата создания записи
       private List<string> FIO = new List<string>();
 
-      public List<string> read(string parameter) // Чтение
+      public void clean() // Чистка
       {
-          parameter.ToLower();
-          List<string> str = new List<string>();
-          switch (parameter)
-          {
-              case "id":
-                  {
-                      str.Add(id_doctor.ToString());
-                      break;
-                  }
-              case "fio":
-                  {
-                      str.AddRange(FIO);
-                      break;
-                  }
-              default:
-                  break;
-          }
-          return str;
+          FIO.Clear();
+          // А вот с датой хз
       }
-
+      public string read_id()  // Чтение id
+      {
+          return id_doctor.ToString();
+      }
+      public List<string> read_fio() // Чтение фио
+      {
+          return FIO;
+      }
+      public bool save(string fio) // Запись
+      {
+          List<string> str = new List<string>(fio.Split(' '));
+          if (str.Count != 0) FIO = str;
+          else return false;
+          return true;
+      }
+      public bool save(string fio, DateTime T) // Запись
+      {
+          List<string> str = new List<string>(fio.Split(' '));
+          if (str.Count != 0) FIO = str;
+          else return false;
+          id_doctor = T;
+          return true;
+      }
+      /*
       public bool record(List<string> fio) // Запись
       {
           if (fio.Count == 0) return false;
@@ -40,5 +47,6 @@ namespace Akupunctura.Logik.Files
           FIO = fio;
           return true;
       }
+       * */
   }
 }

@@ -21,12 +21,12 @@ namespace Akupunctura.Logik.Files
               {
                 case Doc:
                   {
-                    save_(Data.local_doctor,Address + @"\" + Doc + @"\" + Data.local_doctor.read("id") + ".txt");
+                    save_(Data.local_doctor,Address + @"\" + Doc + @"\" + Data.local_doctor.read_id() + ".txt");
                     break;
                   }
                 case Pat:
                   {
-                    save_(Data.local_patient, Address + @"\" + Pat + @"\" + Data.local_patient.read("id") + ".txt");
+                    save_(Data.local_patient, Address + @"\" + Pat + @"\" + Data.local_patient.read_id() + ".txt");
                     break;
                   }
                 case Meas:
@@ -44,8 +44,8 @@ namespace Akupunctura.Logik.Files
 
         private void save_(measurement meas, string str) // Сохранение 
         {
-            List<Int32> C = meas.open_dimension("currents");
-            List<Int32> V = meas.open_dimension("voltages");
+            List<Int32> C = meas.open_current();
+            List<Int32> V = meas.open_voltage();
             try
             {
                 StreamWriter sw = new StreamWriter(str + ".txt");
@@ -55,11 +55,11 @@ namespace Akupunctura.Logik.Files
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                Console.WriteLine("Exception: " + e.Message); // Исправить! (написать что-то разумное, для ошибок)
             }
             finally
             {
-                Console.WriteLine("Executing finally block.");
+                Console.WriteLine("Executing finally block."); // Исправить! (написать что-то разумное, для ошибок)
             }
         }
         private void save_(doctor doc, string str) // Сохранение
@@ -95,11 +95,11 @@ namespace Akupunctura.Logik.Files
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                Console.WriteLine("Exception: " + e.Message); // Исправить! (написать что-то разумное, для ошибок)
             }
             finally
             {
-                Console.WriteLine("Executing finally block.");
+                Console.WriteLine("Executing finally block."); // Исправить! (написать что-то разумное, для ошибок)
             }
             return meas;
         }
