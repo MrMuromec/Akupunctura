@@ -15,7 +15,7 @@ namespace Akupunctura.Logik
         private control_forms BD;
         public void put_point(Int32 Current, Int32 Voltage)
         {
-            local_mesument.put_dimension(Current,Voltage);
+            local_mesument.save_dimension(Current,Voltage);
         }
         public void all_db(control_forms bd)
         {

@@ -16,9 +16,9 @@ namespace Akupunctura.Logik.Files
           FIO.Clear();
           // А вот с датой хз
       }
-      public string read_id()  // Чтение id
+      public DateTime read_id()  // Чтение id
       {
-          return id_doctor.ToString();
+          return id_doctor;
       }
       public List<string> read_fio() // Чтение фио
       {

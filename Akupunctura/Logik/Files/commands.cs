@@ -9,57 +9,37 @@ namespace Akupunctura.Logik.Files
 {
     public class commands
     {
+        const string Doc = "doctor", Pat = "patient", Meas = "measurement", Rig = "rights_docto"; // Имена директорий
+        string[] D;
+        string[] P;
         BinaryFormatter formatter = new BinaryFormatter();
 
-        public void savr_bd(string Address, data_check Data, string save_parameter) // Сохранения в БД
+        public void savr_bd(string Address, data_check Data) // Сохранения в БД
         {
-            const string Doc = "doctor", Pat = "patient", Meas = "measurement", Rig = "rights_docto"; // Имена директорий
-            List<string> symbol = new List<string>(save_parameter.Split(' '));
-            for (int i = symbol.Count(); i>-1; i--)
-            {
-              switch (symbol[i].ToLower())
-              {
-                case Doc:
-                  {
-                    save_(Data.local_doctor,Address + @"\" + Doc + @"\" + Data.local_doctor.read_id() + ".txt");
-                    break;
-                  }
-                case Pat:
-                  {
-                    save_(Data.local_patient, Address + @"\" + Pat + @"\" + Data.local_patient.read_id() + ".txt");
-                    break;
-                  }
-                case Meas:
-                  {
-                    break;
-                  }
-                case Rig:
-                  {
-                    break;
-                  }
-                default: break; // ошибочное название
-              }
-            }
+            /*
+             * Пример для ToString("u")
+             * 15.06.2009 13:45:30 -> 2009-06-15 20:45:30Z
+             * Поскольку : недопустим в название папки, то используем
+             * Replace(':',';')
+             * заменяем : на ;
+             * */
+            save_(Data.local_doctor,Address + @"\" + Doc + @"\" + Data.local_doctor.read_id().ToString("u").Replace(':',';') + ".txt");
+            save_(Data.local_patient, Address + @"\" + Pat + @"\" + Data.local_patient.read_id().ToString("u").Replace(':', ';') + ".txt");
+            save_(Data.local_mesument, Address + @"\" + Meas + @"\" + Data.local_mesument.read_id_measurement().ToString("u").Replace(':', ';') + ".txt");
+            // Прав пока нет!
         }
 
         private void save_(measurement meas, string str) // Сохранение 
         {
-            List<Int32> C = meas.open_current();
-            List<Int32> V = meas.open_voltage();
-            try
+            using (FileStream f = new FileStream(str, FileMode.Create))
+                formatter.Serialize(f, meas);
+            using (StreamWriter sw = new StreamWriter(str + "_VC" + ".txt"))
             {
-                StreamWriter sw = new StreamWriter(str + ".txt");
+                List<Int32> C = meas.read_current();
+                List<Int32> V = meas.read_voltage();
                 for (int i = 0; i < C.Count(); i++)
                     sw.WriteLine(" " + C[i].ToString() + " " + V[i].ToString()); // А потому что так было раньше, но не совсем так
                 sw.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message); // Исправить! (написать что-то разумное, для ошибок)
-            }
-            finally
-            {
-                Console.WriteLine("Executing finally block."); // Исправить! (написать что-то разумное, для ошибок)
             }
         }
         private void save_(doctor doc, string str) // Сохранение
@@ -78,48 +58,51 @@ namespace Akupunctura.Logik.Files
                 formatter.Serialize(f,rig);
         }
 
-
-        public measurement loading_(measurement meas, string str) // Загрузка
+        public data_check loading_bd(string Address, data_check Data)
         {
-            String line;
-            try
+            return Data;
+        }
+
+        private measurement loading_(measurement meas, string str) // Загрузка
+        {
+            using (FileStream f = new FileStream(str, FileMode.Create))
+                meas = (measurement)formatter.Deserialize(f);
+            using (StreamReader sr = new StreamReader(str + "_VC" + ".txt"))
             {
-                StreamReader sr = new StreamReader(str + ".txt");
+                String line;
                 line = sr.ReadLine();
                 while (line != null)
                 {
-                    meas.put_dimension(Convert.ToInt32(line.Split(' ')[1]), Convert.ToInt32(line.Split(' ')[2])); // Разбор типизированного файла
+                    meas.save_dimension(Convert.ToInt32(line.Split(' ')[1]), Convert.ToInt32(line.Split(' ')[2])); // Разбор типизированного файла
                     line = sr.ReadLine();
                 }
                 sr.Close();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message); // Исправить! (написать что-то разумное, для ошибок)
-            }
-            finally
-            {
-                Console.WriteLine("Executing finally block."); // Исправить! (написать что-то разумное, для ошибок)
-            }
             return meas;
         }
-        public doctor loading_(doctor doc, string str) // Загрузка
+        private doctor loading_(doctor doc, string str) // Загрузка
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 doc = (doctor)formatter.Deserialize(f);
             return doc;
         }
-        public patient loading_(patient pat, string str) // Загрузка
+        private patient loading_(patient pat, string str) // Загрузка
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 pat = (patient)formatter.Deserialize(f);
             return pat;
         }
-        public rights_doctor loading_(rights_doctor rig, string str) // Загрузка
+        private rights_doctor loading_(rights_doctor rig, string str) // Загрузка
         {
             using (FileStream f = new FileStream(str, FileMode.Create))
                 rig = (rights_doctor)formatter.Deserialize(f);
             return rig;
+        }
+
+        public void name_list(string address) // Получение всех врачей и пациентов
+        {
+            D = Directory.GetFiles(address + @"\" + Doc, "*.txt");
+            P = Directory.GetFiles(address + @"\" + Pat, "*.txt");
         }
     }
 }

@@ -23,48 +23,21 @@ namespace Akupunctura.Logik.Files
       {
           return FIO;
       }
-      public string read_id() // Чтение
+      public DateTime read_id() // Чтение
       {
-          return id_patient.ToString();
+          return id_patient;
       }
-      public string read_data() // Чтение
+      public DateTime read_data() // Чтение
       {
-          return data_patient.ToString();
+          return data_patient;
       }
-      /*
-      public List<string> read(string parameter) // Чтение
+      public bool save(string fio, DateTime T, DateTime t_data) // Запись
       {
-          parameter.ToLower();
-          List<string> str = new List<string>();
-          switch (parameter)
-          {
-              case "id":
-                  {
-                      str.Add(id_patient.ToString());
-                      break;
-                  }
-              case "fio":
-                  {
-                      str.AddRange(FIO);
-                      break;
-                  }
-              case "data":
-                  {
-                      str.Add(data_patient.ToString());
-                      break;
-                  }
-              default:
-                  break;
-          }
-          return str;
-      }
-      */
-      public bool record(List<string> fio, DateTime data) // Запись !!!!!!!!!!!!!!!!! Править!
-      {
-          if (fio.Count == 0) return false;
-          if (FIO.Count == 0) id_patient = DateTime.UtcNow; // Пишется по мировому времени
-          FIO = fio;
-          data_patient = data;
+          List<string> str = new List<string>(fio.Split(' '));
+          if (str.Count != 0) FIO = str;
+          else return false;
+          id_patient = T;
+          data_patient = t_data;
           return true;
       }
   }
