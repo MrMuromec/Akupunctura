@@ -5,10 +5,9 @@ using System.Text;
 
 namespace Akupunctura.Logik.Files
 {
+  [Serializable]
   public class measurement
   {
-      private DateTime id_doctor;
-      private DateTime id_patient;
       private DateTime id_measurement;
       [NonSerialized]
       private List<Int32> Currents = new List<Int32>();
@@ -31,14 +30,6 @@ namespace Akupunctura.Logik.Files
           Currents.Concat(Current);
           Voltages.Concat(Current);
       }
-      public void save_id_doctor(DateTime id_d) // сохранение id
-      {
-          id_doctor = id_d;
-      }
-      public void save_id_patient(DateTime id_p) // сохранение id
-      {
-          id_patient = id_p;
-      }
       public void save_(DateTime id_m) // сохранение id
       {
           id_measurement = id_m;
@@ -51,14 +42,6 @@ namespace Akupunctura.Logik.Files
       public List<Int32> read_voltage() // Чтение
       {
           return Voltages;
-      }
-      public DateTime read_id_doctor() // Чтение id
-      {
-          return id_doctor;
-      }
-      public DateTime read_id_patient() // Чтение id
-      {
-          return id_patient;
       }
       public DateTime read_id_measurement() // Чтение id
       {

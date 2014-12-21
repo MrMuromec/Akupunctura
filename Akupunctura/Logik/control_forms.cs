@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Akupunctura.Logik.Forms.Device;
+using Akupunctura.Logik.Forms.Рosition_folders;
 using Akupunctura.Logik.Files;
+using System.IO;
 
 namespace Akupunctura.Logik
 {
@@ -12,36 +14,39 @@ namespace Akupunctura.Logik
       private commands command = new commands(); // Команды
       private List<data_check> data_forms = new List<data_check>(); // Список управления данных
       private byte Number;
-      private string address = Environment.CurrentDirectory; // По началу там где лежит exe (Адрес папки с бд)
-
+      public string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки с бд + @"\БД")
+      
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
-          Number = numbering(mainForm);  // Поиск позиций
-          if (Number == 0) return false;
-          else
+          if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address)) 
+              Name_form = "Position"; // Если папка отсуттсвует, то принудительно запрашивается её положение
+          switch (Name_form)
           {
-              data_forms[Number - 1].number_form = Number; // запись текущего номера
-              switch (Name_form)
+              case "Device01":
               {
-                  case "Device01":
-                      {
-                          Device01 device01 = new Device01(mainForm, data_forms[Number - 1]);
-                          device01.MdiParent = mainForm;
-                          device01.Show();
-                          break;
-                      }
-                  default: break; // ошибочное название
-                      
-              }
-              return true;
-          }
+                    if ((Number = numbering(mainForm)) == 0) return false;  // Поиск позиций
+                    Device01 device01 = new Device01(mainForm, data_forms[Number - 1]);
+                    device01.MdiParent = mainForm;
+                    device01.Show();
+                    break;
+               }
+               case "Position":
+               {
+                   Position position = new Position(mainForm, mainForm.BD);
+                   position.MdiParent = mainForm;
+                   position.Show();
+                   break;
+               }
+               default: break; // ошибочное название                     
+          }              
+          return true;
       }
       private byte numbering(Akupunctura mainForm) // Поиск позиций
       {
           byte position = 0;
           byte Max_position = 0;
           for (byte i = 1; i <= data_forms.Count; i++)
-              if (data_forms.FindIndex(delegate(data_check bk) { return bk.number_form == i; }) == -1) // Проверка занятости номеров
+              if (data_forms[i-1].Free) // Проверка занятости номеров
               {
                   position = i; // Записываем свободный
                   break;
@@ -61,6 +66,7 @@ namespace Akupunctura.Logik
                   data_forms[data_forms.Count - 1].all_db(mainForm.BD); // Все данные получаю доступ к базе данных (data_check содержит control_forms)
               }
           }
+          data_forms[position - 1].Free = false;
           return position;
       }
   }

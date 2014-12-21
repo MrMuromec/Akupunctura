@@ -31,12 +31,12 @@ namespace Akupunctura.Logik.Files
       {
           return data_patient;
       }
-      public bool save(string fio, DateTime T, DateTime t_data) // Запись
+      public bool save(string fio, DateTime id_T, DateTime t_data) // Запись
       {
           List<string> str = new List<string>(fio.Split(' '));
           if (str.Count != 0) FIO = str;
           else return false;
-          id_patient = T;
+          id_patient = id_T;
           data_patient = t_data;
           return true;
       }

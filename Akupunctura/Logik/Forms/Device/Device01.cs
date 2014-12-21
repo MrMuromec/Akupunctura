@@ -43,6 +43,8 @@ namespace Akupunctura.Logik.Forms.Device
                  {
                     if (b[j] == 0x0F)
                     {
+                        
+                        data.local_mesument.clean();
                         FileNum++;
                         continue;
                     }
@@ -124,11 +126,11 @@ namespace Akupunctura.Logik.Forms.Device
             MessageBox.Show(e9.Message, "Window_Loaded");
         }
     }
-    private void Device01_FormClosed(object sender, FormClosedEventArgs e)
+    private void Device01_FormClosed(object sender, FormClosedEventArgs e) // Событие закрытия формы 
     {
         timer1.Stop();
         Disconnect_Click_1(sender,e);
-        data.number_form = 0;
+        data.Free = true;
     }
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
     {
