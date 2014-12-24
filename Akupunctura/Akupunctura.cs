@@ -27,5 +27,14 @@ namespace Akupunctura
     {
         if (!BD.MainForms(this, name_form)) MessageBox.Show("Ошибка переполнения", "Закройте лишнии окна");
     }
+
+    private void выборБазыToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        use_MainForms("Position");
+    }
+    private void авторизацияToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        use_MainForms("Authorization");
+    }
   }
 }

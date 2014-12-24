@@ -31,6 +31,13 @@ namespace Akupunctura.Logik.Files
           else return false;
           return true;
       }
+      public bool save(List<string> str, DateTime T) // Запись
+      {
+          if (str.Count != 0) FIO = str;
+          else return false;
+          id_doctor = T;
+          return true;
+      }
       public bool save(string fio, DateTime T) // Запись
       {
           List<string> str = new List<string>(fio.Split(' '));

@@ -40,3 +40,5 @@ C:\Users\Пользователь\Desktop\Akupunctura\Akupunctura\obj\Debug\Akup
 C:\Users\Пользователь\Desktop\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
 C:\Users\Пользователь\Desktop\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb
 D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Рosition_folders.Position.resources
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Authorization.Authorization.resources
+D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.patient_list.Patient_list.resources

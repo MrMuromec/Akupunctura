@@ -23,6 +23,14 @@ namespace Akupunctura.Logik.Files
       {
           return FIO;
       }
+      public string read_fio(string str) // Чтение
+      {
+          for (int i = 0 ; i != FIO.Count(); i++)
+          {
+              str += FIO[i] + " ";
+          }
+          return str;
+      }
       public DateTime read_id() // Чтение
       {
           return id_patient;
@@ -34,7 +42,7 @@ namespace Akupunctura.Logik.Files
       public bool save(string fio, DateTime id_T, DateTime t_data) // Запись
       {
           List<string> str = new List<string>(fio.Split(' '));
-          if (str.Count != 0) FIO = str;
+          if (str[0] != "") FIO = str;
           else return false;
           id_patient = id_T;
           data_patient = t_data;

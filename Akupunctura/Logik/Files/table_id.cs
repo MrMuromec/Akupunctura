@@ -6,7 +6,7 @@ using System.Text;
 namespace Akupunctura.Logik.Files
 {
     [Serializable]
-    class table_id // Аналог строки в таблице со столбцами: доктор, пациент, измерение
+    public class table_id // Аналог строки в таблице со столбцами: доктор, пациент, измерение
     {
         private DateTime id_doctor;
         private DateTime id_patient;

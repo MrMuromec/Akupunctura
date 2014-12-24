@@ -42,8 +42,7 @@ namespace Akupunctura.Logik.Forms.Device
                  for (int j = 0; j < b.Length; j++)
                  {
                     if (b[j] == 0x0F)
-                    {
-                        
+                    {                        
                         data.local_mesument.clean();
                         FileNum++;
                         continue;

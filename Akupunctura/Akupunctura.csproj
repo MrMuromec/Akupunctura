@@ -58,6 +58,12 @@
     <Compile Include="Logik\Files\patient.cs" />
     <Compile Include="Logik\Files\rights_doctor.cs" />
     <Compile Include="Logik\Files\table_id.cs" />
+    <Compile Include="Logik\Forms\Authorization\Authorization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Logik\Forms\Authorization\Authorization.Designer.cs">
+      <DependentUpon>Authorization.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logik\Forms\Device\Device01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,12 @@
       <DependentUpon>Device01.cs</DependentUpon>
     </Compile>
     <Compile Include="Logik\Forms\Device\Package_Coding.cs" />
+    <Compile Include="Logik\Forms\Patient list\Patient_list.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Logik\Forms\Patient list\Patient_list.Designer.cs">
+      <DependentUpon>Patient_list.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logik\Forms\Рosition folders\Position.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,8 +88,14 @@
     <EmbeddedResource Include="Akupunctura.resx">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Logik\Forms\Authorization\Authorization.resx">
+      <DependentUpon>Authorization.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Logik\Forms\Device\Device01.resx">
       <DependentUpon>Device01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Logik\Forms\Patient list\patient_list.resx">
+      <DependentUpon>Patient_list.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Logik\Forms\Рosition folders\Position.resx">
       <DependentUpon>Position.cs</DependentUpon>
