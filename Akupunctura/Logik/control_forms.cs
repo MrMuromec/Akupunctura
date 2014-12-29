@@ -39,7 +39,8 @@ namespace Akupunctura.Logik
                }
                case "Authorization":
                {
-                   Authorization authorization = new Authorization(mainForm, mainForm.BD);
+                   if ((Number = numbering(mainForm)) == 0) return false;  // Поиск позиций
+                   Authorization authorization = new Authorization(mainForm, data_forms[Number - 1]);
                    authorization.MdiParent = mainForm;
                    authorization.Show();
                    break;

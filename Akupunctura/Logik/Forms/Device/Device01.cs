@@ -124,6 +124,7 @@ namespace Akupunctura.Logik.Forms.Device
         {
             MessageBox.Show(e9.Message, "Window_Loaded");
         }
+        ;
     }
     private void Device01_FormClosed(object sender, FormClosedEventArgs e) // Событие закрытия формы 
     {
@@ -136,12 +137,16 @@ namespace Akupunctura.Logik.Forms.Device
         try
         {
             serialPort1.Open();
-            groupBox2.Enabled = true;
             if (serialPort1.IsOpen)
             {
+                groupBox2.Enabled = true;
                 groupBox4.Visible = true;
                 Connect.Enabled = false;
                 Disconnect.Enabled = true;
+            }
+            else
+            {
+                groupBox1.Enabled = true;
             }
             textBox1.Text = "200";
             textBox2.Clear();

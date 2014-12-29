@@ -41,7 +41,6 @@ namespace Akupunctura.Logik.Files
                 str = Path.GetFileNameWithoutExtension(Directory.GetFiles(Address, "*.txt")[i]).Replace(';', ':');
                 if (DateTime.TryParse(str, out T_id))
                     id.Add(T_id.ToUniversalTime());
-                //T_id=T_id;
             }
             /*
             for (int i = files.Count() - 1; i != -1; i--)
@@ -150,12 +149,12 @@ namespace Akupunctura.Logik.Files
              * заменяем : на ;
              * */
             folder(Address);
-            if (Directory.GetFiles(Address + @"\" + Doctor).Length !=0)
-                loading_(Data.local_doctor, Address + @"\" + Doctor + @"\" + d_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа докторов
-            if (Directory.GetFiles(Address + @"\" + Patient).Length != 0)
-                loading_(Data.local_patient, Address + @"\" + Patient + @"\" + p_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа пациентов 
-            if (Directory.GetFiles(Address + @"\" + Measurement).Length != 0)
-                loading_(Data.local_mesument, Address + @"\" + Measurement + @"\" + m_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа измерений
+            if ((Directory.GetFiles(Address + @"\" + Doctor).Length !=0) && (d_id != DateTime.MinValue))
+                Data.local_doctor = loading_(Data.local_doctor, Address + @"\" + Doctor + @"\" + d_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа докторов
+            if ((Directory.GetFiles(Address + @"\" + Patient).Length != 0) && (p_id != DateTime.MinValue))
+                Data.local_patient = loading_(Data.local_patient, Address + @"\" + Patient + @"\" + p_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа пациентов 
+            if ((Directory.GetFiles(Address + @"\" + Measurement).Length != 0) && (m_id != DateTime.MinValue))
+                Data.local_mesument=loading_(Data.local_mesument, Address + @"\" + Measurement + @"\" + m_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа измерений
             // Прав пока нет!
             // Список id  что сохранение, что чтение надо править
             return Data;

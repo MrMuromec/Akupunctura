@@ -46,14 +46,13 @@ namespace Akupunctura.Logik.Files
           id_doctor = T;
           return true;
       }
-      /*
-      public bool record(List<string> fio) // Запись
+      public string read_fio(string str) // Чтение
       {
-          if (fio.Count == 0) return false;
-          if (FIO.Count == 0) id_doctor = DateTime.UtcNow; // Пишется по мировому времени
-          FIO = fio;
-          return true;
+          for (int i = 0; i != FIO.Count(); i++)
+          {
+              str += FIO[i] + " ";
+          }
+          return str;
       }
-       * */
   }
 }

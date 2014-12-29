@@ -20,7 +20,7 @@ namespace Akupunctura.Logik.Files
         {
             id_patient = id_p;
         }
-        public void save_(DateTime id_m) // сохранение id
+        public void save_id_measurement(DateTime id_m) // сохранение id
         {
             id_measurement = id_m;
         }

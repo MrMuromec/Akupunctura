@@ -33,52 +33,26 @@ namespace Akupunctura.Logik.Forms.patient_list
                 data.BD.command.table.save_id_patient(data.local_patient.read_id());
                 data.BD.command.t_id.Add(data.BD.command.table);
                 data.BD.command.savr_d(data.BD.address, data, "patient");
-                data.BD.command.savr_d(data.BD.address, data, "table_idh");
+                //data.BD.command.savr_d(data.BD.address, data, "table_idh");
             }
+            show_list(sender, e);
         }
         private void Patient_list_Load(object sender, EventArgs e) // Загрузка
         {
+            textBox1.Text = " Введите ФИО через пробел и нажмите кнопку 'Ок'";
             dataGridView1.AllowUserToAddRows = false;
             show_list(sender, e);
         }
         private void add_rows() // Создание не совпадающего списка id пациентов
         {
-            //bool tf = true;
             id.Clear();
             data.BD.command.folder(data.BD.address);
             id = data.BD.command.ID(data.BD.address + @"\" + "patient");
-            //DateTime T_id;
-            /*
-            var dir = new DirectoryInfo(data.BD.address + @"\" + "patient"); // папка с файлами 
-            var files = new List<string>(); // список для имен файлов 
-            if (Directory.GetFiles(data.BD.address + @"\" + "patient").Length != 0)
-                foreach (FileInfo file in dir.GetFiles()) // извлекаем все файлы и кидаем их в список 
-                {
-                    files.Add(Path.GetFileNameWithoutExtension(file.FullName)); // получаем полный путь к файлу и потом вычищаем ненужное, оставляем только имя файла. 
-                }            
-            for (int i = files.Count() -1 ; i !=-1  ;i-- )
-            {
-                DateTime.TryParse(files[i].Replace(';', ':'),out T_id);
-                id.Add(T_id);
-            }
-             * */
-            /*
-            for (int i = data.BD.command.t_id.Count() - 1 ; i != -1 ; i--)
-            {
-                for (int ii = id.Count() - 1; ii != -1 ; ii--)
-                    if (data.BD.command.t_id[i].read_id_patient() == id[i])
-                        tf = false;
-                if (tf)
-                    id.Add(data.BD.command.t_id[i].read_id_patient());
-                tf = true;
-            }
-             * */
         }
         private void show_list(object sender, EventArgs e) // Показать
         {
             add_rows();
             dataGridView1.Rows.Clear();
-            id = id;
             for ( int i = id.Count() - 1 ; i != -1 ; i-- )
             {
                 string[] rows = new string[2];
@@ -88,9 +62,9 @@ namespace Akupunctura.Logik.Forms.patient_list
                  * 3) Пациент
                  * 4) Измерение - не имеет смысла 
                  * */
-                data = data.BD.command.loading_d(data.BD.address, data, DateTime.UtcNow, id[i], DateTime.UtcNow);
+                data = data.BD.command.loading_d(data.BD.address, data, DateTime.MinValue, id[i], DateTime.MinValue);
                 rows[0] = data.local_patient.read_fio("");
-                rows[1] = data.local_patient.read_id().ToString("d");
+                rows[1] = data.local_patient.read_data().ToString("d");
         
                 dataGridView1.Rows.Add(rows);
             }
@@ -98,6 +72,15 @@ namespace Akupunctura.Logik.Forms.patient_list
         private void button3_Click(object sender, EventArgs e) // Обновить
         {
             show_list(sender, e);
+        }
+        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e) // Двойной щелчёк по содержимому
+        {
+            int i = id.Count() - e.RowIndex - 1;
+            if ((-1<i)&&(i<id.Count()))
+                data = data.BD.command.loading_d(data.BD.address, data, DateTime.MinValue, id[i], DateTime.MinValue);
+            data.BD.local_patient = data.local_patient;
+            this.Close();
+            //MessageBox.Show(data.local_patient.read_fio(""));
         }
     }
 }
