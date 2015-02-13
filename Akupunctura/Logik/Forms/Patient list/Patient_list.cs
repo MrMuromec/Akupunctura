@@ -30,8 +30,6 @@ namespace Akupunctura.Logik.Forms.patient_list
                 MessageBox.Show("введите ФИО");
             else
             {
-                data.BD.command.table.save_id_patient(data.local_patient.read_id());
-                data.BD.command.t_id.Add(data.BD.command.table);
                 data.BD.command.savr_d(data.BD.address, data, "patient");
                 //data.BD.command.savr_d(data.BD.address, data, "table_idh");
             }

@@ -36,8 +36,6 @@ namespace Akupunctura.Logik.Forms.Authorization
                 MessageBox.Show("введите ФИО");
             else
             {
-                data.BD.command.table.save_id_doctor(data.local_doctor.read_id());
-                data.BD.command.t_id.Add(data.BD.command.table);
                 data.BD.command.savr_d(data.BD.address, data, "doctor");
                 //data.BD.command.savr_d(data.BD.address, data, "table_idh");
             }

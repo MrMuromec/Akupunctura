@@ -10,8 +10,6 @@ namespace Akupunctura.Logik.Files
     public class commands
     {
         private const string Doctor = "doctor", Patient = "patient", Measurement = "measurement", Rights_doctor = "rights_doctor", Table_id = "table_id"; // Имена директорий
-        public List<table_id> t_id = new List<table_id>();
-        public table_id table = new table_id();
         private BinaryFormatter formatter = new BinaryFormatter();
 
         public void folder(string Adress) // Создание папок
@@ -121,11 +119,6 @@ namespace Akupunctura.Logik.Files
             using (FileStream f = new FileStream(str, FileMode.OpenOrCreate))
                 formatter.Serialize(f, pat);
         }
-        private void save_(rights_doctor rig, string str) // Сохранение
-        {
-            using (FileStream f = new FileStream(str, FileMode.OpenOrCreate))
-                formatter.Serialize(f,rig);
-        }
         /*
         private void save_(string str) // Сохранение
         {
@@ -194,12 +187,6 @@ namespace Akupunctura.Logik.Files
             using (FileStream f = new FileStream(str, FileMode.Open))
                 pat = (patient)formatter.Deserialize(f);
             return pat;
-        }
-        private rights_doctor loading_(rights_doctor rig, string str) // Загрузка
-        {
-            using (FileStream f = new FileStream(str, FileMode.Open))
-                rig = (rights_doctor)formatter.Deserialize(f);
-            return rig;
         }
         /*
         private void loading_(string str) // Загрузка
