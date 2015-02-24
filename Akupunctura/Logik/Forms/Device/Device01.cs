@@ -35,6 +35,8 @@ namespace Akupunctura.Logik.Forms.Device
 
         void serialPort_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
         {
+            MessageBox.Show("Оно работает");
+            /*
             try
             {
                 byte[] b = new byte[serialPort1.BytesToRead];
@@ -96,11 +98,13 @@ namespace Akupunctura.Logik.Forms.Device
         {
             MessageBox.Show("serialPort1_DataReceived" + e3.Message);
         }
+             * */
     }
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
         try
         {
+            // Выбор порта
             string[] availablePorts = SerialPort.GetPortNames();
             foreach (string port in availablePorts)
             {
@@ -112,13 +116,16 @@ namespace Akupunctura.Logik.Forms.Device
             {
               serialPort1.PortName = str;
             }
+            // Настройки порта
             serialPort1.StopBits = StopBits.One;
             serialPort1.DataBits = 8;
             serialPort1.BaudRate = 921600;
             serialPort1.Parity = Parity.None;
-            serialPort1.ReceivedBytesThreshold = 100;
-            serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
-            groupBox1.Enabled = groupBox4.Enabled = true;
+            ////////
+            serialPort1.Open();
+            //serialPort1.ReceivedBytesThreshold = 100;
+            //serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
+            groupBox1.Enabled = groupBox4.Enabled = true; // Поля
         }
         catch (Exception e9)
         {
@@ -154,7 +161,7 @@ namespace Akupunctura.Logik.Forms.Device
         catch (Exception e1)
         {
             //groupBox1.Enabled = true;
-            MessageBox.Show(e1.Message, "Error_Button_Click");            
+            MessageBox.Show(e1.Message, "Подключение");            
         }
     }
     private void Disconnect_Click_1(object sender, EventArgs e) // Выключение
