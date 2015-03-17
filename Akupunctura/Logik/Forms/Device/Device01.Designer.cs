@@ -52,6 +52,7 @@
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.textBox2 = new System.Windows.Forms.TextBox();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
+      this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox4.SuspendLayout();
@@ -406,5 +407,6 @@
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.TextBox textBox2;
     private System.Windows.Forms.Timer timer1;
+    private System.ComponentModel.BackgroundWorker backgroundWorker1;
   }
 }

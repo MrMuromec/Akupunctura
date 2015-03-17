@@ -18,16 +18,19 @@ namespace Akupunctura.Logik.Forms.Device
 {
     public partial class Device01 : Form
     {
-        System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort();
-        private Queue<byte> DataByteQueue = new Queue<byte>();
-        byte b;
+        private System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
+        private Queue<byte> DataByteQueue = new Queue<byte>(); // Колекция байтовых данных с порта
+        private Thread DecoderThread; // поток для фонового разбора данных из колекции
+        private volatile bool status_DecoderThread; // Стутус разбора
+        private const Int32 milliseconds = 1; // Время сна между проверками
+        private byte b; // читаемый байт
         //object sw_locker = new object();
         //byte[] tmp = new byte[5];
         //byte[] buf = new byte[5];
         //int n = 0;
         //int FileNum = 0;
-        data_check data;
-        bool pressure_timer = false;
+        private data_check data;
+        private bool pressure_timer = false;
         //Int32[] point_CV = new Int32[2];
         
         public Device01(Akupunctura mainForm, data_check parameters)
@@ -35,7 +38,41 @@ namespace Akupunctura.Logik.Forms.Device
             data = parameters;
             InitializeComponent();
         }
+        private void wait_messag() // Висящая функция для чтения данных с порта по мере их поступления
+        {
+          DataByteQueue.Clear();
+          while (true)
+          {
+            if (Port.IsOpen && Port.BytesToRead >= 1) // Проверка на допустипость (открыт и не пуст)
+            {
+              for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte())
+                DataByteQueue.Enqueue(b); // Добавление по байтно в колекцию
+            }
+            else Thread.Sleep(milliseconds);// сон между проверками 
+          }
+        }
+        private void dissection_collection() // Разбор колеции (то что пришло)
+        {
+          byte[] array_;// Массив данных из колекции
+          byte[] pack_ = new byte[5]; // Пачка
+          while (status_DecoderThread)
+          {
+            if (DataByteQueue.Count() == 0) Thread.Sleep(milliseconds);// сон между проверками
+            else
+            {
+              array_ = DataByteQueue.ToArray();
+              for (int i = 0; i < array_.Count(); i++)
+              {
+                if (array_[i] == 0x0F) // Новое измерение
+                {
+                  continue;
+                }
 
+              }
+            }
+          }
+        }
+/*
         void serialPort_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
         {            
             try
@@ -110,9 +147,10 @@ namespace Akupunctura.Logik.Forms.Device
         {
             MessageBox.Show("serialPort1_DataReceived" + e3.Message);
         }
-             * */
+      ///////////////////////////
     }
-    public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
+ * */   
+      public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
         try
         {
@@ -134,7 +172,7 @@ namespace Akupunctura.Logik.Forms.Device
             Port.BaudRate = 921600;
             Port.Parity = Parity.None;
             ////////
-            Port.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); // Назначения обработчика для событию SerialPort.DataReceived
+            //Port.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); // Назначения обработчика для событию SerialPort.DataReceived
             //serialPort1.ReceivedBytesThreshold = 100;
             groupBox1.Enabled = groupBox4.Enabled = true; // Поля
         }
@@ -142,7 +180,6 @@ namespace Akupunctura.Logik.Forms.Device
         {
             MessageBox.Show(e9.Message, "Window_Loaded");
         }
-        ;
     }
     private void Device01_FormClosed(object sender, FormClosedEventArgs e) // Событие закрытия формы 
     {
@@ -157,13 +194,19 @@ namespace Akupunctura.Logik.Forms.Device
             Port.Open();
             if (Port.IsOpen)
             {
+              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox2.Enabled = true;
                 groupBox4.Visible = true;
                 Connect.Enabled = false;
                 Disconnect.Enabled = true;
+              // Новый поток для разбора
+                status_DecoderThread = true;
+                DecoderThread = new Thread(dissection_collection);
+                DecoderThread.Start();
             }
             else
             {
+              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox1.Enabled = true;
             }
             textBox1.Text = "200";
@@ -178,7 +221,9 @@ namespace Akupunctura.Logik.Forms.Device
     {
     try
             {
-                Port.Close();
+                Port.Close(); // закрытие порта
+                status_DecoderThread = false; // Коректное завершение потока
+                // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox2.Enabled = false;
                 if (!Port.IsOpen)
                 {
@@ -199,6 +244,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private byte[] send(byte[] a) // Отправка
     {
+      // нужны проверки!!!!
         Port.Write(a, 0, a.Length);
         return a;
     }

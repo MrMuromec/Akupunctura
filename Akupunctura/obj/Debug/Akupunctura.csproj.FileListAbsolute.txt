@@ -42,3 +42,16 @@ C:\Users\Пользователь\Desktop\Akupunctura\Akupunctura\bin\Debug\Akup
 D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Рosition_folders.Position.resources
 D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Authorization.Authorization.resources
 D:\GitHub\Akupunctura\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.patient_list.Patient_list.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe.config
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csprojResolveAssemblyReference.cache
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Akupunctura.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Authorization.Authorization.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Device.Device01.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.patient_list.Patient_list.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Рosition_folders.Position.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
+C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-92\Akupunctura\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
