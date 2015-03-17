@@ -18,15 +18,18 @@ namespace Akupunctura.Logik.Forms.Device
 {
     public partial class Device01 : Form
     {
-        System.IO.Ports.SerialPort serialPort1 = new System.IO.Ports.SerialPort();
-        object sw_locker = new object();
-        byte[] tmp = new byte[5];
-        byte[] buf = new byte[5];
-        int n = 0;
-        int FileNum = 0;
+        System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort();
+        private Queue<byte> DataByteQueue = new Queue<byte>();
+        byte b;
+        //object sw_locker = new object();
+        //byte[] tmp = new byte[5];
+        //byte[] buf = new byte[5];
+        //int n = 0;
+        //int FileNum = 0;
         data_check data;
-        Int32[] point_CV = new Int32[2];
         bool pressure_timer = false;
+        //Int32[] point_CV = new Int32[2];
+        
         public Device01(Akupunctura mainForm, data_check parameters)
         {
             data = parameters;
@@ -34,8 +37,17 @@ namespace Akupunctura.Logik.Forms.Device
         }
 
         void serialPort_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
-        {
-            MessageBox.Show("Оно работает");
+        {            
+            try
+            {
+                Thread.Sleep(0);// Элемент магии
+                for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte()) 
+                    DataByteQueue.Enqueue(b);
+            }
+            catch (Exception e3)
+            {
+                MessageBox.Show("serialPort1_DataReceived" + e3.Message);
+            }
             /*
             try
             {
@@ -114,17 +126,16 @@ namespace Akupunctura.Logik.Forms.Device
             string str = comboBox1.SelectedItem.ToString();
             if (str != "")
             {
-              serialPort1.PortName = str;
+              Port.PortName = str;
             }
             // Настройки порта
-            serialPort1.StopBits = StopBits.One;
-            serialPort1.DataBits = 8;
-            serialPort1.BaudRate = 921600;
-            serialPort1.Parity = Parity.None;
+            Port.StopBits = StopBits.One;
+            Port.DataBits = 8;
+            Port.BaudRate = 921600;
+            Port.Parity = Parity.None;
             ////////
-            serialPort1.Open();
+            Port.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); // Назначения обработчика для событию SerialPort.DataReceived
             //serialPort1.ReceivedBytesThreshold = 100;
-            //serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
             groupBox1.Enabled = groupBox4.Enabled = true; // Поля
         }
         catch (Exception e9)
@@ -143,8 +154,8 @@ namespace Akupunctura.Logik.Forms.Device
     {
         try
         {
-            serialPort1.Open();
-            if (serialPort1.IsOpen)
+            Port.Open();
+            if (Port.IsOpen)
             {
                 groupBox2.Enabled = true;
                 groupBox4.Visible = true;
@@ -160,7 +171,6 @@ namespace Akupunctura.Logik.Forms.Device
         }
         catch (Exception e1)
         {
-            //groupBox1.Enabled = true;
             MessageBox.Show(e1.Message, "Подключение");            
         }
     }
@@ -168,9 +178,9 @@ namespace Akupunctura.Logik.Forms.Device
     {
     try
             {
-                serialPort1.Close();
+                Port.Close();
                 groupBox2.Enabled = false;
-                if (!serialPort1.IsOpen)
+                if (!Port.IsOpen)
                 {
                     Connect.Enabled = true;
                     Disconnect.Enabled = false;
@@ -179,7 +189,7 @@ namespace Akupunctura.Logik.Forms.Device
             }
     catch (Exception e2)
     {
-        MessageBox.Show(e2.Message , "Button_Click_1");
+        MessageBox.Show(e2.Message, "Выключение");
     }
     }
     private byte[] convert_A(byte A) // Перевод в массив
@@ -189,7 +199,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private byte[] send(byte[] a) // Отправка
     {
-        serialPort1.Write(a, 0, a.Length);
+        Port.Write(a, 0, a.Length);
         return a;
     }
     private void text_mesegbox (byte[] a) // Отображение
@@ -237,7 +247,7 @@ namespace Akupunctura.Logik.Forms.Device
     {
         if (comboBox2.Text != "")
         {
-            serialPort1.BaudRate = Int32.Parse(comboBox2.Text);
+            Port.BaudRate = Int32.Parse(comboBox2.Text);
         }
     }
     private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) // Выбор паритета
@@ -246,10 +256,10 @@ namespace Akupunctura.Logik.Forms.Device
         {
             switch (comboBox3.SelectedIndex)
             {
-                case 0: serialPort1.Parity = Parity.None; break;
-                case 1: serialPort1.Parity = Parity.Even; break;
-                case 2: serialPort1.Parity = Parity.Odd; break;
-                case 3: serialPort1.Parity = Parity.None; break;
+                case 0: Port.Parity = Parity.None; break;
+                case 1: Port.Parity = Parity.Even; break;
+                case 2: Port.Parity = Parity.Odd; break;
+                case 3: Port.Parity = Parity.None; break;
                 default: break;
 
             }
@@ -265,9 +275,9 @@ namespace Akupunctura.Logik.Forms.Device
         {
             switch (comboBox4.SelectedIndex)
             {
-                case 0: serialPort1.StopBits = StopBits.One; break;
-                case 1: serialPort1.StopBits = StopBits.OnePointFive; break;
-                case 2: serialPort1.StopBits = StopBits.Two; break;
+                case 0: Port.StopBits = StopBits.One; break;
+                case 1: Port.StopBits = StopBits.OnePointFive; break;
+                case 2: Port.StopBits = StopBits.Two; break;
                 default: break;
             }
         }
@@ -278,7 +288,7 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) // Выбор порта
     {
-        serialPort1.PortName = comboBox1.SelectedItem.ToString();
+        Port.PortName = comboBox1.SelectedItem.ToString();
     }
   }
 }
