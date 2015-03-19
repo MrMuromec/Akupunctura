@@ -31,14 +31,15 @@ namespace Akupunctura.Logik.Forms.Device
         //int FileNum = 0;
         private data_check data;
         private bool pressure_timer = false;
-        //Int32[] point_CV = new Int32[2];
+        Int32[] point_CV = new Int32[2]; // Точка = ток напряжение
         
         public Device01(Akupunctura mainForm, data_check parameters)
         {
             data = parameters;
             InitializeComponent();
         }
-        private void wait_messag() // Висящая функция для чтения данных с порта по мере их поступления
+      /*
+        private void wait_messag() // Висящая функция для чтения данных с порта по мере их поступления (немного бреда, но с пользой)
         {
           DataByteQueue.Clear();
           while (true)
@@ -48,27 +49,67 @@ namespace Akupunctura.Logik.Forms.Device
               for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte())
                 DataByteQueue.Enqueue(b); // Добавление по байтно в колекцию
             }
-            else Thread.Sleep(milliseconds);// сон между проверками 
+            else 
+              Thread.Sleep(milliseconds);// сон между проверками 
           }
         }
+       * */
         private void dissection_collection() // Разбор колеции (то что пришло)
         {
+          /*
+           *  План:
+           *  1) Убрать колекцию и массив оставив одну колекцию (определиться с тем какая нужна)
+           *  2) Растощитть чтение и обработку, ну или сделать больше проверок при чтение
+           * */
+          byte n = 0;
           byte[] array_;// Массив данных из колекции
           byte[] pack_ = new byte[5]; // Пачка
           while (status_DecoderThread)
           {
+            
+            //
+            // Переписать в отдельный поток!!
+            if (Port.IsOpen && Port.BytesToRead >= 1) // Проверка на допустипость (открыт и не пуст)
+              for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte())
+                DataByteQueue.Enqueue(b); // Добавление по байтно в колекцию
+            //
             if (DataByteQueue.Count() == 0) Thread.Sleep(milliseconds);// сон между проверками
             else
             {
               array_ = DataByteQueue.ToArray();
               for (int i = 0; i < array_.Count(); i++)
               {
-                if (array_[i] == 0x0F) // Новое измерение
+                if (array_[i] == 0x0F) // 0000 1111 (новое измерение)
                 {
+                  // сохранение
                   continue;
                 }
-
+                if ((array_[i] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000
+                {
+                  n = 0;
+                  pack_[n] = array_[i]; 
+                  continue;
+                }
+                if (((array_[i] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
+                {
+                  n++;
+                  if (n == 5) break; // Всё плохо
+                  pack_[n] = array_[i];
+                  package p = new package(pack_); // Кидаем пачку на разбор
+                  if (p.IsI) // Решаем кто ток, кто напряжение
+                  {
+                    point_CV[1] = p.Int_pack; // Забираем с разбора значение
+                    data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                  }
+                  else
+                  {
+                    point_CV[0] = p.Int_pack; // Забираем с разбора значение
+                  }
+                  continue;
+                }
               }
+              // Надо добавить стирание обработанного из колекции
+              if (n == 5) break; // Всё плохо
             }
           }
         }
@@ -92,17 +133,17 @@ namespace Akupunctura.Logik.Forms.Device
                 serialPort1.Read(b, 0, b.Length);
                  for (int j = 0; j < b.Length; j++)
                  {
-                    if (b[j] == 0x0F)
+                    if (b[j] == 0x0F) // 0000 1111 (новое измерение)
                     {                        
                         data.local_mesument.clean();
                         FileNum++;
                         continue;
                     }
-                    if (b[j] == 0x07)
+                    if (b[j] == 0x07) // 0000 0111 (?)
                     {
                         continue;
                     }
-                    if ((b[j] & 0xC0) == 0x40)//первый байт
+                    if ((b[j] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000 
                     {
                         if (n >= 0)
                         {
@@ -114,7 +155,7 @@ namespace Akupunctura.Logik.Forms.Device
                         }
                         continue;
                     }
-                    if (((b[j] & 0x80) != 0))//не первый байт
+                    if (((b[j] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
                     {
                         if (n > 0)
                         {
