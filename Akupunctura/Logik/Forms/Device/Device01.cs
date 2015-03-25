@@ -19,182 +19,84 @@ namespace Akupunctura.Logik.Forms.Device
     public partial class Device01 : Form
     {
         private System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
-        private Queue<byte> DataByteQueue = new Queue<byte>(); // Колекция байтовых данных с порта
-        private Thread DecoderThread; // поток для фонового разбора данных из колекции
-        private volatile bool status_DecoderThread; // Стутус разбора
+        private List<byte> DataByte = new List<byte>(); // Колекция байтовых данных для данных с порта
+        private Thread Decoder; // Поток для фонового разбора данных
+        private volatile bool status_Decoder; // Стутус разбора
         private const Int32 milliseconds = 1; // Время сна между проверками
-        private byte b; // читаемый байт
-        //object sw_locker = new object();
-        //byte[] tmp = new byte[5];
-        //byte[] buf = new byte[5];
-        //int n = 0;
-        //int FileNum = 0;
         private data_check data;
         private bool pressure_timer = false;
-        Int32[] point_CV = new Int32[2]; // Точка = ток напряжение
-        
+        Int32[] point_CV = new Int32[2]; // Точка = ток, напряжение
+        /*
+         * 1) Разобраться с работой потока
+         * 2) Переписать работу с таймером (возможно через фоновый поток)
+         * */
+
         public Device01(Akupunctura mainForm, data_check parameters)
         {
             data = parameters;
             InitializeComponent();
         }
-      /*
-        private void wait_messag() // Висящая функция для чтения данных с порта по мере их поступления (немного бреда, но с пользой)
+        private void dissection_collection() // Чтение с порта и разбор
         {
-          DataByteQueue.Clear();
-          while (true)
-          {
+          const byte size_p = 5; // Размер пачки          
+          byte[] pack_ = new byte[size_p]; // Пачка
+          byte n = 0; // Счётчик
+          while (status_Decoder)
             if (Port.IsOpen && Port.BytesToRead >= 1) // Проверка на допустипость (открыт и не пуст)
-            {
-              for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte())
-                DataByteQueue.Enqueue(b); // Добавление по байтно в колекцию
-            }
-            else 
-              Thread.Sleep(milliseconds);// сон между проверками 
-          }
-        }
-       * */
-        private void dissection_collection() // Разбор колеции (то что пришло)
-        {
-          /*
-           *  План:
-           *  1) Убрать колекцию и массив оставив одну колекцию (определиться с тем какая нужна)
-           *  2) Растощитть чтение и обработку, ну или сделать больше проверок при чтение
-           * */
-          byte n = 0;
-          byte[] array_;// Массив данных из колекции
-          byte[] pack_ = new byte[5]; // Пачка
-          while (status_DecoderThread)
-          {
-            
-            //
-            // Переписать в отдельный поток!!
-            if (Port.IsOpen && Port.BytesToRead >= 1) // Проверка на допустипость (открыт и не пуст)
-              for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte())
-                DataByteQueue.Enqueue(b); // Добавление по байтно в колекцию
-            //
-            if (DataByteQueue.Count() == 0) Thread.Sleep(milliseconds);// сон между проверками
-            else
-            {
-              array_ = DataByteQueue.ToArray();
-              for (int i = 0; i < array_.Count(); i++)
+              try
               {
-                if (array_[i] == 0x0F) // 0000 1111 (новое измерение)
-                {
-                  // сохранение
-                  continue;
-                }
-                if ((array_[i] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000
-                {
-                  n = 0;
-                  pack_[n] = array_[i]; 
-                  continue;
-                }
-                if (((array_[i] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
-                {
-                  n++;
-                  if (n == 5) break; // Всё плохо
-                  pack_[n] = array_[i];
-                  package p = new package(pack_); // Кидаем пачку на разбор
-                  if (p.IsI) // Решаем кто ток, кто напряжение
-                  {
-                    point_CV[1] = p.Int_pack; // Забираем с разбора значение
-                    data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
-                  }
-                  else
-                  {
-                    point_CV[0] = p.Int_pack; // Забираем с разбора значение
-                  }
-                  continue;
-                }
+                DataByte.Add((byte)Port.ReadByte()); // Сохранение в колекцию
               }
-              // Надо добавить стирание обработанного из колекции
-              if (n == 5) break; // Всё плохо
-            }
-          }
-        }
-/*
-        void serialPort_DataReceived(object sender, EventArgs e) // чтение и преобразования сообщений в 32-разрядное целое число
-        {            
-            try
+              catch (Exception e3)
+              {
+                MessageBox.Show("serialPort1_DataReceived" + e3.Message); // Что-то пошлло не так
+              }
+            else
+              Thread.Sleep(milliseconds); // Сон между проверками 
+            while (0 < DataByte.Count())
             {
-                Thread.Sleep(0);// Элемент магии
-                for (; Port.BytesToRead >= 1; b = (byte)Port.ReadByte()) 
-                    DataByteQueue.Enqueue(b);
-            }
-            catch (Exception e3)
-            {
-                MessageBox.Show("serialPort1_DataReceived" + e3.Message);
-            }
-            /*
-            try
-            {
-                byte[] b = new byte[serialPort1.BytesToRead];
-                serialPort1.Read(b, 0, b.Length);
-                 for (int j = 0; j < b.Length; j++)
-                 {
-                    if (b[j] == 0x0F) // 0000 1111 (новое измерение)
-                    {                        
-                        data.local_mesument.clean();
-                        FileNum++;
-                        continue;
-                    }
-                    if (b[j] == 0x07) // 0000 0111 (?)
-                    {
-                        continue;
-                    }
-                    if ((b[j] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000 
-                    {
-                        if (n >= 0)
-                        {
-                            tmp = new byte[5];
-                            n = 0;
-                            tmp[n] = b[j];
-                            n++;
-                            continue;
-                        }
-                        continue;
-                    }
-                    if (((b[j] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
-                    {
-                        if (n > 0)
-                        {
-                            if (n < 5)
-                            {
-                                tmp[n] = b[j];
-                                n++;
-                                if (n == 5)
-                                {
-                                    package p = new package(tmp);
-                                    if (p.IsI)
-                                    {
-                                        point_CV[1] = p.Int_pack;
-                                        data.put_point(point_CV[0], point_CV[1]);
-                                    }
-                                    else
-                                    {
-                                        point_CV[0] = p.Int_pack;
-                                    }
-                                    n = 0;
-                                }
-                                continue;
-                            }
-                            continue;
-                        }
-                    }
+              if (DataByte[0] == 0x0F) // 0000 1111 (новое измерение)
+              {
+                // сохранение
+                continue;
+              }
+              if ((DataByte[0] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000
+              {
+                n = 0;
+                pack_[n] = DataByte[0];
+                continue;
+              }
+              if (((DataByte[0] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
+              {
+                n++;
+                if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
+                {
+                  status_Decoder = false;
+                  break;
                 }
-            }
-        catch (Exception e3)
-        {
-            MessageBox.Show("serialPort1_DataReceived" + e3.Message);
-        }
-      ///////////////////////////
-    }
- * */   
-      public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
+                pack_[n] = DataByte[0];
+                package p = new package(pack_); // Кидаем пачку на разбор
+                if (p.IsI) // Решаем кто ток, кто напряжение
+                {
+                  point_CV[1] = p.Int_pack; // Забираем с разбора значение
+                  data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                }
+                else
+                {
+                  point_CV[0] = p.Int_pack; // Забираем с разбора значение
+                }
+                continue;
+              }
+              DataByte.Remove(DataByte[0]); // Удаляем первое вхождение нулевого элемента (Удаляем только что обработанный нулевой элемент колекции)
+            }              
+        } 
+    public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
         try
         {
+            // Установка отправки произвольного заданного значения в позицию по умолчанию для значения 0x00
+            cb_first.SelectedIndex = 0;
+            cd_second.SelectedIndex = 0;
             // Выбор порта
             string[] availablePorts = SerialPort.GetPortNames();
             foreach (string port in availablePorts)
@@ -212,9 +114,6 @@ namespace Akupunctura.Logik.Forms.Device
             Port.DataBits = 8;
             Port.BaudRate = 921600;
             Port.Parity = Parity.None;
-            ////////
-            //Port.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived); // Назначения обработчика для событию SerialPort.DataReceived
-            //serialPort1.ReceivedBytesThreshold = 100;
             groupBox1.Enabled = groupBox4.Enabled = true; // Поля
         }
         catch (Exception e9)
@@ -224,7 +123,6 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void Device01_FormClosed(object sender, FormClosedEventArgs e) // Событие закрытия формы 
     {
-        timer1.Stop();
         Disconnect_Click_1(sender,e);
         data.Free = true;
     }
@@ -235,19 +133,20 @@ namespace Akupunctura.Logik.Forms.Device
             Port.Open();
             if (Port.IsOpen)
             {
-              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox2.Enabled = true;
                 groupBox4.Visible = true;
                 Connect.Enabled = false;
                 Disconnect.Enabled = true;
-              // Новый поток для разбора
-                status_DecoderThread = true;
-                DecoderThread = new Thread(dissection_collection);
-                DecoderThread.Start();
+            // Новый поток для разбора
+                status_Decoder = true;
+                Decoder = new Thread(dissection_collection);
+                Decoder.IsBackground = true;
+                Decoder.Start();
             }
             else
             {
-              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox1.Enabled = true;
             }
             textBox1.Text = "200";
@@ -262,9 +161,11 @@ namespace Akupunctura.Logik.Forms.Device
     {
     try
             {
+                timer1.Stop();
+            // Завершение работы с портом
                 Port.Close(); // закрытие порта
-                status_DecoderThread = false; // Коректное завершение потока
-                // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+                status_Decoder = false; // Коректное завершение для потока
+            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
                 groupBox2.Enabled = false;
                 if (!Port.IsOpen)
                 {
@@ -285,8 +186,14 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private byte[] send(byte[] a) // Отправка
     {
-      // нужны проверки!!!!
-        Port.Write(a, 0, a.Length);
+      try
+      {
+          Port.Write(a, 0, a.Length);
+      }
+      catch (Exception e9)
+      {
+        MessageBox.Show("Port.Write" + e9.Message);
+      }
         return a;
     }
     private void text_mesegbox (byte[] a) // Отображение
@@ -321,9 +228,7 @@ namespace Akupunctura.Logik.Forms.Device
             timer1.Start();
         }
         else
-        {
             timer1.Stop();
-        }
         pressure_timer = !pressure_timer;
     }
     private void Send_Click(object sender, EventArgs e) // Отправка произвольного заданного значения
@@ -333,9 +238,7 @@ namespace Akupunctura.Logik.Forms.Device
     private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) // Выбор скорочти
     {
         if (comboBox2.Text != "")
-        {
             Port.BaudRate = Int32.Parse(comboBox2.Text);
-        }
     }
     private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) // Выбор паритета
     {
