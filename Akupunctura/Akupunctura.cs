@@ -17,6 +17,7 @@ namespace Akupunctura
     public Akupunctura()
     {  
       InitializeComponent();
+      BD.get_Parent(this);
     }
 
     private void МенюРаботыПрибораToolStripMenuItem_Click(object sender, EventArgs e)

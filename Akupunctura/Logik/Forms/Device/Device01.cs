@@ -19,7 +19,7 @@ namespace Akupunctura.Logik.Forms.Device
     public partial class Device01 : Form
     {
         private volatile System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
-        private List<byte> DataByte = new List<byte>(); // Колекция байтовых данных для данных с порта
+        //private List<byte> DataByte = new List<byte>(); // Колекция байтовых данных для данных с порта
         private Thread Decoder; // Поток для фонового разбора данных
         private volatile bool status_Decoder; // Стутус разбора
         private const Int32 milliseconds = 1; // Время сна между проверками
@@ -33,16 +33,54 @@ namespace Akupunctura.Logik.Forms.Device
             InitializeComponent();
         }
         private void dissection_collection() // Чтение с порта и разбор
-        {
-            
+        {           
           const byte size_p = 5; // Размер пачки          
           byte[] pack_ = new byte[size_p]; // Пачка
-          byte n = 0; // Счётчик          
+          byte n = 0; // Счётчик  
+          byte r_byte; // Загруженный байт
           while (status_Decoder)
               try
               {
-                  Thread.Sleep(1);// 1ms
-                  DataByte.Add((byte)Port.BaseStream.ReadByte()); // Сохранение в колекцию  
+                  //Thread.Sleep(1);// 1ms
+                  //DataByte.Add((byte)Port.BaseStream.ReadByte()); // Сохранение в колекцию  
+                  r_byte = (byte)Port.BaseStream.ReadByte(); // Считывание с порта  
+                  //Thread.Sleep(0); //Хитрая фишка
+                  if (r_byte == 0x0F) // 0000 1111 (начало измерение)
+                  {
+                    continue;
+                  }
+                  if (r_byte == 0x07) // 0000 0111 (конец измерения)
+                  {
+                    continue;
+                  }
+                  if ((r_byte & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000
+                  {
+                    n = 0;
+                    pack_[n] = r_byte;
+                    continue;
+                  }
+                  if (((r_byte & 0x80) != 0)) // не первый байт пачки 1*** **** & 1000 0000 != 0000 0000
+                  {
+                    n++;
+                    if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
+                    {
+                      status_Decoder = false;
+                      break;
+                    }
+                    pack_[n] = r_byte;
+                    package p = new package(pack_); // Кидаем пачку на разбор
+                    if (p.IsI) // Решаем кто ток, кто напряжение
+                    {
+                      point_CV[1] = p.Int_pack; // Забираем с разбора значение
+                      data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                    }
+                    else
+                    {
+                      point_CV[0] = p.Int_pack; // Забираем с разбора значение
+                    }
+                    continue;
+                  }
+                /*
                   while (0 < DataByte.Count())
                   {
                       Thread.Sleep(0); //Хитрая фишка
@@ -83,6 +121,7 @@ namespace Akupunctura.Logik.Forms.Device
                       }
                       DataByte.RemoveAt(0); // Удаляем первое вхождение нулевого элемента (Удаляем только что обработанный нулевой элемент колекции)
                   }
+                 * */
               }
               catch (Exception e3)
               {
@@ -130,14 +169,14 @@ namespace Akupunctura.Logik.Forms.Device
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
     {
         // Отрытие порта
-        Port.Open();
-        // Новый поток для разбора
-        status_Decoder = true;
-        Decoder = new Thread(dissection_collection);
-        Decoder.IsBackground = true;
-        Decoder.Start();
+        for (Port.Open(); !Port.IsOpen; Thread.Sleep(1)) ; // Что бы открылся
         if (Port.IsOpen)
         {
+              // Новый поток для разбора
+              status_Decoder = true;
+              Decoder = new Thread(dissection_collection);
+              Decoder.IsBackground = true;
+              Decoder.Start();
               // Элементы управления(видимость/невидемость, отвечать/не отвечать)
               groupBox2.Enabled = true;
               groupBox4.Visible = true;

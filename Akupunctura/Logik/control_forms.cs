@@ -16,11 +16,52 @@ namespace Akupunctura.Logik
      
       private List<data_check> data_forms = new List<data_check>(); // Список управления данных
       private byte Number;
+      private Akupunctura Parent;
       public doctor local_doctor = new doctor(); // Авторизованный доктор 
       public patient local_patient = new patient(); // Текущий пациент (нужен для измерений)
       public commands command = new commands(); // Команды
       public string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки с бд + @"\БД")
-      
+      /********************************************************************************************/
+      public void form_Device01() // Запуск работы с прибором
+      {
+        if (check_Position())
+        {
+          Number = numbering(Parent);
+          Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
+          device01.MdiParent = Parent;
+          device01.Show();
+        }
+      }
+      public void form_Position() // Запуск выбора бызы
+      {
+        Position position = new Position(Parent, Parent.BD);
+        position.MdiParent = Parent;
+        position.Show();
+      }
+
+      public void get_Parent(Akupunctura mainForm) // Получение родителя
+      {
+        this.Parent = mainForm;
+      }
+
+      private bool check_Position() // Проверка наличия базы
+      {
+        if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address))
+        {
+          form_Position();
+          return false;
+        }
+        return true;
+      }
+      private bool check_doctor() // Проверка наличия врача
+      {
+        if (local_doctor.read_fio().Count() == 0)
+        {
+          return false;
+        }
+        return true;
+      }
+      /********************************************************************************************/
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
           if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address))
