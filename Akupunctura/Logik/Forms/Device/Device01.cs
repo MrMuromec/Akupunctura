@@ -18,7 +18,7 @@ namespace Akupunctura.Logik.Forms.Device
 {
     public partial class Device01 : Form
     {
-        private System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
+        private volatile System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
         private List<byte> DataByte = new List<byte>(); // Колекция байтовых данных для данных с порта
         private Thread Decoder; // Поток для фонового разбора данных
         private volatile bool status_Decoder; // Стутус разбора
@@ -26,10 +26,6 @@ namespace Akupunctura.Logik.Forms.Device
         private data_check data;
         private bool pressure_timer = false;
         Int32[] point_CV = new Int32[2]; // Точка = ток, напряжение
-        /*
-         * 1) Разобраться с работой потока
-         * 2) Переписать работу с таймером (возможно через фоновый поток)
-         * */
 
         public Device01(Akupunctura mainForm, data_check parameters)
         {
@@ -38,57 +34,62 @@ namespace Akupunctura.Logik.Forms.Device
         }
         private void dissection_collection() // Чтение с порта и разбор
         {
+            
           const byte size_p = 5; // Размер пачки          
           byte[] pack_ = new byte[size_p]; // Пачка
-          byte n = 0; // Счётчик
+          byte n = 0; // Счётчик          
           while (status_Decoder)
-            if (Port.IsOpen && Port.BytesToRead >= 1) // Проверка на допустипость (открыт и не пуст)
               try
               {
-                DataByte.Add((byte)Port.ReadByte()); // Сохранение в колекцию
+                  Thread.Sleep(1);// 1ms
+                  DataByte.Add((byte)Port.BaseStream.ReadByte()); // Сохранение в колекцию  
+                  while (0 < DataByte.Count())
+                  {
+                      Thread.Sleep(0); //Хитрая фишка
+                      if (DataByte[0] == 0x0F) // 0000 1111 (начало измерение)
+                      {
+                          continue;
+                      }
+                      if (DataByte[0] == 0x07) // 0000 0111 (конец измерения)
+                      {
+                          continue;
+                      }
+                      if ((DataByte[0] & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000
+                      {
+                          n = 0;
+                          pack_[n] = DataByte[0];
+                          continue;
+                      }
+                      if (((DataByte[0] & 0x80) != 0)) // не первый байт пачки 1*** **** & 1000 0000 != 0000 0000
+                      {
+                          n++;
+                          if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
+                          {
+                              status_Decoder = false;
+                              break;
+                          }
+                          pack_[n] = DataByte[0];
+                          package p = new package(pack_); // Кидаем пачку на разбор
+                          if (p.IsI) // Решаем кто ток, кто напряжение
+                          {
+                              point_CV[1] = p.Int_pack; // Забираем с разбора значение
+                              data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                          }
+                          else
+                          {
+                              point_CV[0] = p.Int_pack; // Забираем с разбора значение
+                          }
+                          continue;
+                      }
+                      DataByte.RemoveAt(0); // Удаляем первое вхождение нулевого элемента (Удаляем только что обработанный нулевой элемент колекции)
+                  }
               }
               catch (Exception e3)
               {
-                MessageBox.Show("serialPort1_DataReceived" + e3.Message); // Что-то пошлло не так
-              }
-            else
-              Thread.Sleep(milliseconds); // Сон между проверками 
-            while (0 < DataByte.Count())
-            {
-              if (DataByte[0] == 0x0F) // 0000 1111 (новое измерение)
-              {
-                // сохранение
-                continue;
-              }
-              if ((DataByte[0] & 0xC0) == 0x40) // первый байт 01** **** & 1100 0000 = 0100 0000
-              {
-                n = 0;
-                pack_[n] = DataByte[0];
-                continue;
-              }
-              if (((DataByte[0] & 0x80) != 0)) // не первый байт 1*** **** & 1000 0000 != 0000 0000
-              {
-                n++;
-                if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
-                {
+                  MessageBox.Show("Port.BaseStream.ReadByte" + e3.Message, "Ошибка чтения"); // Что-то пошлло не так
                   status_Decoder = false;
                   break;
-                }
-                pack_[n] = DataByte[0];
-                package p = new package(pack_); // Кидаем пачку на разбор
-                if (p.IsI) // Решаем кто ток, кто напряжение
-                {
-                  point_CV[1] = p.Int_pack; // Забираем с разбора значение
-                  data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
-                }
-                else
-                {
-                  point_CV[0] = p.Int_pack; // Забираем с разбора значение
-                }
-                continue;
               }
-              DataByte.Remove(DataByte[0]); // Удаляем первое вхождение нулевого элемента (Удаляем только что обработанный нулевой элемент колекции)
-            }              
         } 
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
@@ -128,55 +129,43 @@ namespace Akupunctura.Logik.Forms.Device
     }
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
     {
-        try
+        // Отрытие порта
+        Port.Open();
+        // Новый поток для разбора
+        status_Decoder = true;
+        Decoder = new Thread(dissection_collection);
+        Decoder.IsBackground = true;
+        Decoder.Start();
+        if (Port.IsOpen)
         {
-            Port.Open();
-            if (Port.IsOpen)
-            {
-            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
-                groupBox2.Enabled = true;
-                groupBox4.Visible = true;
-                Connect.Enabled = false;
-                Disconnect.Enabled = true;
-            // Новый поток для разбора
-                status_Decoder = true;
-                Decoder = new Thread(dissection_collection);
-                Decoder.IsBackground = true;
-                Decoder.Start();
-            }
-            else
-            {
-            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
-                groupBox1.Enabled = true;
-            }
-            textBox1.Text = "200";
-            textBox2.Clear();
+              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+              groupBox2.Enabled = true;
+              groupBox4.Visible = true;
+              Connect.Enabled = false;
+              Disconnect.Enabled = true;
         }
-        catch (Exception e1)
+        else
         {
-            MessageBox.Show(e1.Message, "Подключение");            
+              // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+              groupBox1.Enabled = true;
         }
+        textBox1.Text = "200";
+        textBox2.Clear();
     }
     private void Disconnect_Click_1(object sender, EventArgs e) // Выключение
     {
-    try
-            {
-                timer1.Stop();
-            // Завершение работы с портом
-                Port.Close(); // закрытие порта
-                status_Decoder = false; // Коректное завершение для потока
-            // Элементы управления(видимость/невидемость, отвечать/не отвечать)
-                groupBox2.Enabled = false;
-                if (!Port.IsOpen)
-                {
-                    Connect.Enabled = true;
-                    Disconnect.Enabled = false;
-                    groupBox4.Visible = false;
-                }
-            }
-    catch (Exception e2)
+    timer1.Stop();
+    // Завершение работы с портом
+    status_Decoder = false; // Коректное завершение для потока
+    // Зартытие порта
+    Port.Close(); 
+    if (!Port.IsOpen)
     {
-        MessageBox.Show(e2.Message, "Выключение");
+        // Элементы управления(видимость/невидемость, отвечать/не отвечать)
+        groupBox2.Enabled = false;
+        Connect.Enabled = true;
+        Disconnect.Enabled = false;
+        groupBox4.Visible = false;
     }
     }
     private byte[] convert_A(byte A) // Перевод в массив
