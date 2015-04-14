@@ -19,10 +19,8 @@ namespace Akupunctura.Logik.Forms.Device
     public partial class Device01 : Form
     {
         private volatile System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
-        //private List<byte> DataByte = new List<byte>(); // Колекция байтовых данных для данных с порта
         private Thread Decoder; // Поток для фонового разбора данных
         private volatile bool status_Decoder; // Стутус разбора
-        private const Int32 milliseconds = 1; // Время сна между проверками
         private data_check data;
         private bool pressure_timer = false;
         Int32[] point_CV = new Int32[2]; // Точка = ток, напряжение
@@ -41,10 +39,7 @@ namespace Akupunctura.Logik.Forms.Device
           while (status_Decoder)
               try
               {
-                  //Thread.Sleep(1);// 1ms
-                  //DataByte.Add((byte)Port.BaseStream.ReadByte()); // Сохранение в колекцию  
                   r_byte = (byte)Port.BaseStream.ReadByte(); // Считывание с порта  
-                  //Thread.Sleep(0); //Хитрая фишка
                   if (r_byte == 0x0F) // 0000 1111 (начало измерение)
                   {
                     continue;
@@ -80,48 +75,6 @@ namespace Akupunctura.Logik.Forms.Device
                     }
                     continue;
                   }
-                /*
-                  while (0 < DataByte.Count())
-                  {
-                      Thread.Sleep(0); //Хитрая фишка
-                      if (DataByte[0] == 0x0F) // 0000 1111 (начало измерение)
-                      {
-                          continue;
-                      }
-                      if (DataByte[0] == 0x07) // 0000 0111 (конец измерения)
-                      {
-                          continue;
-                      }
-                      if ((DataByte[0] & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000
-                      {
-                          n = 0;
-                          pack_[n] = DataByte[0];
-                          continue;
-                      }
-                      if (((DataByte[0] & 0x80) != 0)) // не первый байт пачки 1*** **** & 1000 0000 != 0000 0000
-                      {
-                          n++;
-                          if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
-                          {
-                              status_Decoder = false;
-                              break;
-                          }
-                          pack_[n] = DataByte[0];
-                          package p = new package(pack_); // Кидаем пачку на разбор
-                          if (p.IsI) // Решаем кто ток, кто напряжение
-                          {
-                              point_CV[1] = p.Int_pack; // Забираем с разбора значение
-                              data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
-                          }
-                          else
-                          {
-                              point_CV[0] = p.Int_pack; // Забираем с разбора значение
-                          }
-                          continue;
-                      }
-                      DataByte.RemoveAt(0); // Удаляем первое вхождение нулевого элемента (Удаляем только что обработанный нулевой элемент колекции)
-                  }
-                 * */
               }
               catch (Exception e3)
               {

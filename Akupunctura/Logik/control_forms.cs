@@ -22,9 +22,14 @@ namespace Akupunctura.Logik
       public commands command = new commands(); // Команды
       public string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки с бд + @"\БД")
       /********************************************************************************************/
+      /*
+       * 1) Написать индивидуальную выдачу данных
+       * 2) Отредактировать формы
+       * */
+      /********************************************************************************************/
       public void form_Device01() // Запуск работы с прибором
       {
-        if (check_Position())
+        if (check_Position() && check_Doctor() && check_Patient())
         {
           Number = numbering(Parent);
           Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
@@ -38,12 +43,26 @@ namespace Akupunctura.Logik
         position.MdiParent = Parent;
         position.Show();
       }
-
+      public void fofm_Doctor() // Запуск окна выбора врача
+      {
+          Number = numbering(Parent);
+          Authorization authorization = new Authorization(Parent, data_forms[Number - 1]);
+          authorization.MdiParent = Parent;
+          authorization.Show();
+      }
+      public void fofm_Patient() // Запуск окна выбора пациента
+      {
+          Number = numbering(Parent);
+          Patient_list patient_list = new Patient_list(Parent, data_forms[Number - 1]);
+          patient_list.MdiParent = Parent;
+          patient_list.Show();
+      }
+      /****************************************************************************************/
       public void get_Parent(Akupunctura mainForm) // Получение родителя
       {
         this.Parent = mainForm;
       }
-
+      /****************************************************************************************/
       private bool check_Position() // Проверка наличия базы
       {
         if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address))
@@ -53,13 +72,23 @@ namespace Akupunctura.Logik
         }
         return true;
       }
-      private bool check_doctor() // Проверка наличия врача
+      private bool check_Doctor() // Проверка наличия врача
       {
         if (local_doctor.read_fio().Count() == 0)
         {
-          return false;
+            fofm_Doctor();
+            return false;
         }
         return true;
+      }
+      private bool check_Patient() // Проверка наличия пациента
+      {
+          if (local_patient.read_fio().Count == 0)
+          {
+              fofm_Patient();
+              return false;
+          }
+          return true;
       }
       /********************************************************************************************/
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
