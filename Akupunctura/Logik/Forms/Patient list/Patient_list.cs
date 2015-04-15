@@ -30,7 +30,7 @@ namespace Akupunctura.Logik.Forms.patient_list
                 MessageBox.Show("введите ФИО");
             else
             {
-                data.BD.command.savr_d(data.BD.address, data, "patient");
+                data.BD.command.savr_d(data.BD.get_Addres(), data, "patient");
                 //data.BD.command.savr_d(data.BD.address, data, "table_idh");
             }
             show_list(sender, e);
@@ -44,8 +44,8 @@ namespace Akupunctura.Logik.Forms.patient_list
         private void add_rows() // Создание не совпадающего списка id пациентов
         {
             id.Clear();
-            data.BD.command.folder(data.BD.address);
-            id = data.BD.command.ID(data.BD.address + @"\" + "patient");
+            data.BD.command.folder(data.BD.get_Addres());
+            id = data.BD.command.ID(data.BD.get_Addres() + @"\" + "patient");
         }
         private void show_list(object sender, EventArgs e) // Показать
         {
@@ -60,7 +60,7 @@ namespace Akupunctura.Logik.Forms.patient_list
                  * 3) Пациент
                  * 4) Измерение - не имеет смысла 
                  * */
-                data = data.BD.command.loading_d(data.BD.address, data, DateTime.MinValue, id[i], DateTime.MinValue);
+                data = data.BD.command.loading_d(data.BD.get_Addres(), data, DateTime.MinValue, id[i], DateTime.MinValue);
                 rows[0] = data.local_patient.read_fio("");
                 rows[1] = data.local_patient.read_data().ToString("d");
         
@@ -75,7 +75,7 @@ namespace Akupunctura.Logik.Forms.patient_list
         {
             int i = id.Count() - e.RowIndex - 1;
             if ((-1<i)&&(i<id.Count()))
-                data = data.BD.command.loading_d(data.BD.address, data, DateTime.MinValue, id[i], DateTime.MinValue);
+                data = data.BD.command.loading_d(data.BD.get_Addres(), data, DateTime.MinValue, id[i], DateTime.MinValue);
             data.BD.local_patient = data.local_patient;
             this.Close();
             //MessageBox.Show(data.local_patient.read_fio(""));

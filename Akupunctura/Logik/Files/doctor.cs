@@ -2,20 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Akupunctura.Logik.Files
 {
   [Serializable]
   public class doctor
   {
-      private DateTime id_doctor; // Дата создания записи
-      private List<string> FIO = new List<string>();
+      public const string name_folder = "doctor"; // Название директории 
+      private DateTime id_doctor = DateTime.MinValue; // Дата создания записи
+      private List<string> FIO = new List<string>(); // ФИО
+      private BinaryFormatter formatter = new BinaryFormatter(); // Для сериализации
 
-      public void clean() // Чистка
+      private void folder(string str) // Создание папки для врачей
       {
-          FIO.Clear();
-          // А вот с датой хз
+          System.IO.Directory.CreateDirectory(str + @"\" + name_folder);
       }
+      private string id_str(DateTime id) // Перевод в строку названия файла
+      {
+          return id.ToString("u").Replace(':', ';') + ".txt";
+      }
+
+      public void save_disk ( doctor doc ) // Сохранение на диск
+      {
+          using (FileStream f = new FileStream(name_folder + id_str(id_doctor), FileMode.OpenOrCreate))
+              formatter.Serialize(f, doc);
+      }
+      public void read_disk ( out doctor doc , DateTime id ) // Загрузка с диска
+      {
+          using (FileStream f = new FileStream(name_folder + id_str(id), FileMode.Open))
+              doc = (doctor)formatter.Deserialize(f);
+      }
+
       public DateTime read_id()  // Чтение id
       {
           return id_doctor;
@@ -24,19 +43,13 @@ namespace Akupunctura.Logik.Files
       {
           return FIO;
       }
-      public bool save(string fio) // Запись
+      public string read_fio(string str) // Чтение фио
       {
-          List<string> str = new List<string>(fio.Split(' '));
-          if (str.Count != 0) FIO = str;
-          else return false;
-          return true;
-      }
-      public bool save(List<string> str, DateTime T) // Запись
-      {
-          if (str.Count != 0) FIO = str;
-          else return false;
-          id_doctor = T;
-          return true;
+          for (int i = 0; i != FIO.Count(); i++)
+          {
+              str += FIO[i] + " ";
+          }
+          return str;
       }
       public bool save(string fio, DateTime T) // Запись
       {
@@ -45,14 +58,6 @@ namespace Akupunctura.Logik.Files
           else return false;
           id_doctor = T;
           return true;
-      }
-      public string read_fio(string str) // Чтение
-      {
-          for (int i = 0; i != FIO.Count(); i++)
-          {
-              str += FIO[i] + " ";
-          }
-          return str;
       }
   }
 }

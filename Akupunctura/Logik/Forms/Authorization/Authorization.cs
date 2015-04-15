@@ -14,7 +14,7 @@ namespace Akupunctura.Logik.Forms.Authorization
     {
         List<DateTime> id = new List<DateTime>();
         data_check data;
-        public Authorization(Akupunctura mainForm, data_check parameters)
+        public Authorization(data_check parameters)
         {
             data = parameters;   
             InitializeComponent();
@@ -36,16 +36,16 @@ namespace Akupunctura.Logik.Forms.Authorization
                 MessageBox.Show("введите ФИО");
             else
             {
-                data.BD.command.savr_d(data.BD.address, data, "doctor");
+                data.BD.command.savr_d(data.BD.get_Addres(), data, "doctor");
                 //data.BD.command.savr_d(data.BD.address, data, "table_idh");
             }
             show_list(sender, e);
         }
-        private void add_rows() // Создание не совпадающего списка id пациентов
+        private void add_rows() // Создание не совпадающего списка id 
         {
             id.Clear();
-            data.BD.command.folder(data.BD.address);
-            id = data.BD.command.ID(data.BD.address + @"\" + "doctor");
+            data.BD.command.folder(data.BD.get_Addres());
+            id = data.BD.command.ID(data.BD.get_Addres() + @"\" + "doctor");
         }
         private void show_list(object sender, EventArgs e) // Показать
         {
@@ -60,7 +60,7 @@ namespace Akupunctura.Logik.Forms.Authorization
                  * 3) Пациент - не имеет смысла
                  * 4) Измерение - не имеет смысла 
                  * */
-                data = data.BD.command.loading_d(data.BD.address, data, id[i], DateTime.MinValue, DateTime.MinValue);
+                data = data.BD.command.loading_d(data.BD.get_Addres(), data, id[i], DateTime.MinValue, DateTime.MinValue);
                 rows[0] = data.local_doctor.read_fio("");
 
                 dataGridView1.Rows.Add(rows);
@@ -70,7 +70,7 @@ namespace Akupunctura.Logik.Forms.Authorization
         {
             int i = id.Count() - e.RowIndex - 1;
             if ((-1 < i) && (i < id.Count()))
-                data = data.BD.command.loading_d(data.BD.address, data, id[i], DateTime.MinValue, DateTime.MinValue);
+                data = data.BD.command.loading_d(data.BD.get_Addres(), data, id[i], DateTime.MinValue, DateTime.MinValue);
             data.BD.local_doctor = data.local_doctor;
             this.Close();
         }

@@ -22,20 +22,7 @@ namespace Akupunctura
 
     private void МенюРаботыПрибораToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        use_MainForms("Device01");
-    }
-    private void use_MainForms(string name_form)
-    {
-        if (!BD.MainForms(this, name_form)) MessageBox.Show("Ошибка переполнения", "Закройте лишнии окна");
-    }
-
-    private void выборБазыToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        use_MainForms("Position");
-    }
-    private void авторизацияToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-        use_MainForms("Authorization");
+        BD.form_Device01();
     }
   }
 }

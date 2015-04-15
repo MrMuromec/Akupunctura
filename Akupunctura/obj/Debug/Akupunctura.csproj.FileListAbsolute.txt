@@ -68,3 +68,16 @@ C:\Users\Пользователь\Desktop\Папка общего доступа
 C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-102\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Рosition_folders.Position.resources
 C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-102\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
 C:\Users\Пользователь\Desktop\Папка общего доступа\БМТ2-102\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
+F:\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe.config
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.exe
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.pdb
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csprojResolveAssemblyReference.cache
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Akupunctura.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Authorization.Authorization.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Device.Device01.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.patient_list.Patient_list.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Logik.Forms.Рosition_folders.Position.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
+F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
+F:\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
+F:\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb

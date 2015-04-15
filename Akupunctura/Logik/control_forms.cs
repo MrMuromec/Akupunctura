@@ -13,25 +13,35 @@ namespace Akupunctura.Logik
 {
   public class control_forms // Управление дочерними формами
   {
-     
+        // То от чего надо избавиться
       private List<data_check> data_forms = new List<data_check>(); // Список управления данных
-      private byte Number;
-      private Akupunctura Parent;
       public doctor local_doctor = new doctor(); // Авторизованный доктор 
       public patient local_patient = new patient(); // Текущий пациент (нужен для измерений)
       public commands command = new commands(); // Команды
-      public string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки с бд + @"\БД")
+      private byte Number;
+
+      // Необходимое
+      private Akupunctura Parent; // Родительская форма
+      private string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки)
+      private List<DateTime> ID_DOC = new List<DateTime>(); // id Докторов
       /********************************************************************************************/
-      /*
-       * 1) Написать индивидуальную выдачу данных
-       * 2) Отредактировать формы
-       * */
+      public List<DateTime> add_rows(string str) // Создание не совпадающего списка id 
+      {
+          DateTime id;
+          List<DateTime> many_id = new List<DateTime>();
+          for (int i = Directory.GetFiles(str, "*.txt").Length; i != 0; i--)
+          {
+              if (DateTime.TryParse(Path.GetFileNameWithoutExtension(Directory.GetFiles(str, "*.txt")[i - 1]).Replace(';', ':'), out id))
+                  many_id.Add(id.ToUniversalTime());
+          }
+          return many_id;
+      }
       /********************************************************************************************/
       public void form_Device01() // Запуск работы с прибором
       {
         if (check_Position() && check_Doctor() && check_Patient())
         {
-          Number = numbering(Parent);
+          //Number = numbering(Parent);
           Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
           device01.MdiParent = Parent;
           device01.Show();
@@ -39,20 +49,20 @@ namespace Akupunctura.Logik
       }
       public void form_Position() // Запуск выбора бызы
       {
-        Position position = new Position(Parent, Parent.BD);
+        Position position = new Position(Parent.BD);
         position.MdiParent = Parent;
         position.Show();
       }
       public void fofm_Doctor() // Запуск окна выбора врача
       {
-          Number = numbering(Parent);
-          Authorization authorization = new Authorization(Parent, data_forms[Number - 1]);
+          //Number = numbering(Parent);
+          Authorization authorization = new Authorization(data_forms[Number - 1]);
           authorization.MdiParent = Parent;
           authorization.Show();
       }
       public void fofm_Patient() // Запуск окна выбора пациента
       {
-          Number = numbering(Parent);
+          //Number = numbering(Parent);
           Patient_list patient_list = new Patient_list(Parent, data_forms[Number - 1]);
           patient_list.MdiParent = Parent;
           patient_list.Show();
@@ -91,6 +101,16 @@ namespace Akupunctura.Logik
           return true;
       }
       /********************************************************************************************/
+      public void Addres (string address) // Получение адреса
+      {
+          this.address = address;
+      }
+      public string get_Addres() // Отдача адреса
+      {
+          return address;
+      }
+      /********************************************************************************************/
+      /*
       public bool MainForms(Akupunctura mainForm, string Name_form) // Вызов форми и выдача довольствия им же
       {
           if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address))
@@ -180,5 +200,6 @@ namespace Akupunctura.Logik
           data_forms[position - 1].local_doctor.save(local_doctor.read_fio(),local_doctor.read_id()); // Запись авторизовавшегося доктора по умолчанию
           return position;
       }
+       * */
   }
 }
