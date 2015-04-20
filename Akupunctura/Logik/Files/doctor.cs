@@ -10,10 +10,17 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class doctor
   {
-      public const string name_folder = "doctor"; // Название директории 
+      const string name_folder = "doctor"; // Название директории 
       private DateTime id_doctor = DateTime.MinValue; // Дата создания записи
       private List<string> FIO = new List<string>(); // ФИО
+      [NonSerialized]
       private BinaryFormatter formatter = new BinaryFormatter(); // Для сериализации
+
+      public string get_folder(string str)
+      {
+        folder(str);
+        return (@"\" + name_folder);
+      }
 
       private void folder(string str) // Создание папки для врачей
       {
@@ -24,14 +31,16 @@ namespace Akupunctura.Logik.Files
           return id.ToString("u").Replace(':', ';') + ".txt";
       }
 
-      public void save_disk ( doctor doc ) // Сохранение на диск
+      public void save_disk ( doctor doc, string str ) // Сохранение на диск
       {
-          using (FileStream f = new FileStream(name_folder + id_str(id_doctor), FileMode.OpenOrCreate))
+          folder(str);
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder + id_str(id_doctor), FileMode.OpenOrCreate))
               formatter.Serialize(f, doc);
       }
-      public void read_disk ( out doctor doc , DateTime id ) // Загрузка с диска
+      public void read_disk ( out doctor doc , DateTime id, string str ) // Загрузка с диска
       {
-          using (FileStream f = new FileStream(name_folder + id_str(id), FileMode.Open))
+          folder(str);
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder + id_str(id), FileMode.Open))
               doc = (doctor)formatter.Deserialize(f);
       }
 

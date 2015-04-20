@@ -18,18 +18,20 @@ using Akupunctura.Logik.Forms.Device;
 using Akupunctura.Logik.Forms.Рosition_folders;
 using Akupunctura.Logik.Forms.Authorization;
 using Akupunctura.Logik.Forms.patient_list;
+using Akupunctura.Logik.Files;
 
 namespace Akupunctura
 {
   public partial class Akupunctura : Form
   {
-      public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай) + data_check (прощай)
-
-    // http://rsdn.ru/article/dotnet/CSThreading2.xml
+    public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай) + data_check (прощай)
 
     private string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки)
+
     private List<DateTime> ID_DOC = new List<DateTime>(); // id Докторов
-    
+    private int i_id_doc = -1;
+    private List<DateTime> ID_PAT = new List<DateTime>(); // id Пациентов
+    private int i_id_pat = -1;
 
     public Akupunctura()
     {  
@@ -58,6 +60,10 @@ namespace Akupunctura
     /********************************************************************************************/
     public void form_Device01() // Запуск работы с прибором
     {
+      doctor local_doctor = new doctor();
+
+      if (( -1 < i_id_doc ) && ( i_id_doc < ID_DOC.Count ))
+        local_doctor.read_disk(out local_doctor, ID_DOC[i_id_doc], address);
       /*
        * 2 аргумента
        * входные данные - то с чем дают (могут и не дать)
@@ -65,17 +71,13 @@ namespace Akupunctura
        * проверка выдаёт праду когда данные корекны
        * а если ложь то нужно запросить данные
        */
-      //while (!check_Position() && !check_Doctor() && !check_Patient()) ;
-      if (check_Position() && check_Doctor() && check_Patient())
-      {  
-          MessageBox.Show("2");
-        //Number = numbering(Parent);
-          /*
-        Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
-        device01.MdiParent = Parent;
-        device01.Show();
-           * */
-      }
+      if (check_Position() && check_Doctor(local_doctor) && check_Patient()) ;
+            //Number = numbering(Parent);
+            /*
+            Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
+            device01.MdiParent = Parent;
+            device01.Show();
+            * */
     }
     public void form_Position() // Запуск выбора бызы
     {
@@ -83,14 +85,11 @@ namespace Akupunctura
       position.MdiParent = this;
       position.Show();
     }
-    public void fofm_Doctor() // Запуск окна выбора врача
+    public void fofm_Doctor(doctor local_doctor) // Запуск окна выбора врача
     {
-      /*
-      //Number = numbering(Parent);
-      Authorization authorization = new Authorization(data_forms[Number - 1]);
-      authorization.MdiParent = Parent;
+      Authorization authorization = new Authorization(local_doctor, this);
+      authorization.MdiParent = this;
       authorization.Show();
-       * */
     }
     public void fofm_Patient() // Запуск окна выбора пациента
     {
@@ -101,10 +100,10 @@ namespace Akupunctura
       patient_list.Show();
        */
     }
-    /****************************************************************************************/
+    /***************************************************************************************
     public void get_Parent(Akupunctura mainForm) // Получение родителя
     {
-      this.Parent = mainForm;
+      //this.Parent = mainForm;
     }
     /****************************************************************************************/
     private bool check_Position() // Проверка наличия базы
@@ -114,17 +113,20 @@ namespace Akupunctura
         form_Position();
         return false;
       }
-      return true;
+      else
+      {
+        ID_DOC.Clear();
+        ID_DOC = add_rows(address + new doctor().get_folder(address));
+        return true;
+      }
     }
-    private bool check_Doctor() // Проверка наличия врача
+    private bool check_Doctor(doctor local_doctor) // Проверка наличия врача
     {
-      /*
       if (local_doctor.read_fio().Count() == 0)
       {
-        fofm_Doctor();
+        fofm_Doctor( local_doctor);
         return false;
       }
-       * */
       return true;
     }
     private bool check_Patient() // Проверка наличия пациента

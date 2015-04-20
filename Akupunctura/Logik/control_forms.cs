@@ -58,9 +58,11 @@ namespace Akupunctura.Logik
       public void fofm_Doctor() // Запуск окна выбора врача
       {
           //Number = numbering(Parent);
+        /*
           Authorization authorization = new Authorization(data_forms[Number - 1]);
           authorization.MdiParent = Parent;
           authorization.Show();
+         * */
       }
       public void fofm_Patient() // Запуск окна выбора пациента
       {
