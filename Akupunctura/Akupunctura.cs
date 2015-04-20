@@ -7,22 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Akupunctura.Logik;
-
+///////////////////////////////////////////////////////////
 using System.Windows;
 using System.Threading;
 using System.IO.Ports;
 using System.IO;
 using System.Runtime.InteropServices;
+///////////////////////////////////////////////////////////
+using Akupunctura.Logik.Forms.Device;
+using Akupunctura.Logik.Forms.Рosition_folders;
+using Akupunctura.Logik.Forms.Authorization;
+using Akupunctura.Logik.Forms.patient_list;
 
 namespace Akupunctura
 {
   public partial class Akupunctura : Form
   {
+      public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай) + data_check (прощай)
+
     // http://rsdn.ru/article/dotnet/CSThreading2.xml
 
     private string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки)
     private List<DateTime> ID_DOC = new List<DateTime>(); // id Докторов
-    public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай)
+    
 
     public Akupunctura()
     {  
@@ -58,24 +65,23 @@ namespace Akupunctura
        * проверка выдаёт праду когда данные корекны
        * а если ложь то нужно запросить данные
        */
-      while (!check_Position() && !check_Doctor() && !check_Patient()) ;
-     /*
+      //while (!check_Position() && !check_Doctor() && !check_Patient()) ;
       if (check_Position() && check_Doctor() && check_Patient())
-      {
+      {  
+          MessageBox.Show("2");
         //Number = numbering(Parent);
+          /*
         Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
         device01.MdiParent = Parent;
         device01.Show();
+           * */
       }
-    */
     }
     public void form_Position() // Запуск выбора бызы
     {
-      /*
-      Position position = new Position(Parent.BD);
-      position.MdiParent = Parent;
+      Position position = new Position(this);
+      position.MdiParent = this;
       position.Show();
-       * */
     }
     public void fofm_Doctor() // Запуск окна выбора врача
     {

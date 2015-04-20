@@ -11,10 +11,10 @@ namespace Akupunctura.Logik.Forms.Рosition_folders
 {
     public partial class Position : Form
     {
-        private control_forms BD;
-        public Position(control_forms BD) // Инициализация
+        private Akupunctura Ak;
+        public Position(Akupunctura Ak) // Инициализация
         {
-            this.BD = BD;           
+            this.Ak = Ak;           
             InitializeComponent();
         }
 
@@ -28,7 +28,7 @@ namespace Akupunctura.Logik.Forms.Рosition_folders
             try
             {
                 System.IO.Directory.CreateDirectory(textBox1.Text + @"\БД");
-                BD.Addres(textBox1.Text + @"\БД");
+                Ak.Addres(textBox1.Text + @"\БД");
                 this.Close();
             }
             catch (System.ArgumentException e2)
@@ -39,7 +39,7 @@ namespace Akupunctura.Logik.Forms.Рosition_folders
 
         private void Position_Load(object sender, EventArgs e) // Событие загрузки
         {
-            textBox1.Text = BD.get_Addres().Replace(@"\БД", "");
+            textBox1.Text = Ak.get_Addres().Replace(@"\БД", "");
         }
     }
 }

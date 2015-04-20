@@ -49,9 +49,11 @@ namespace Akupunctura.Logik
       }
       public void form_Position() // Запуск выбора бызы
       {
+          /*
         Position position = new Position(Parent.BD);
         position.MdiParent = Parent;
         position.Show();
+           * */
       }
       public void fofm_Doctor() // Запуск окна выбора врача
       {
