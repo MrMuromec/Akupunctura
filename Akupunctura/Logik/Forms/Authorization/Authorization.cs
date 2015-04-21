@@ -13,7 +13,6 @@ namespace Akupunctura.Logik.Forms.Authorization
 {
     public partial class Authorization : Form
     {
-        private string adres;
         private Akupunctura Ak;
         private List<DateTime> id = new List<DateTime>();
         private doctor doc;
@@ -22,7 +21,6 @@ namespace Akupunctura.Logik.Forms.Authorization
         {
             this.Ak= Ak;
             this.doc = doc;
-            adres = Ak.get_Addres();
             InitializeComponent();
         }
 
@@ -42,22 +40,19 @@ namespace Akupunctura.Logik.Forms.Authorization
                 MessageBox.Show("введите ФИО");
             else
             {
-                doc.save_disk(doc,adres);
+                doc.save_disk(doc, Ak.get_Addres());
             }
             show_list(sender, e);
         }
         private void show_list(object sender, EventArgs e) // Показать
         {
+            string[] rows = new string[1];
             id.Clear();
-            id = Ak.add_rows(adres + doc.get_folder(adres));
+            id = Ak.add_rows(Ak.get_Addres() + doc.get_folder(Ak.get_Addres()));
             dataGridView1.Rows.Clear();
             for (int i = id.Count() - 1; i != -1; i--)
             {
-
-                string[] rows = new string[1];
-                //data = data.BD.command.loading_d(data.BD.get_Addres(), data, id[i], DateTime.MinValue, DateTime.MinValue);
-                //rows[0] = data.local_doctor.read_fio("");
-                doc.read_disk(out doc, id [i],adres);
+                doc.read_disk(out doc, id[i], Ak.get_Addres());
                 rows[0] = doc.read_fio("");
                 dataGridView1.Rows.Add(rows);
             }
@@ -65,11 +60,11 @@ namespace Akupunctura.Logik.Forms.Authorization
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e) // Двойной щелчёк по содержимому
         {
             int i = id.Count() - e.RowIndex - 1;
-          /*
-            if ((-1 < i) && (i < id.Count()))
-                data = data.BD.command.loading_d(data.BD.get_Addres(), data, id[i], DateTime.MinValue, DateTime.MinValue);
-            data.BD.local_doctor = data.local_doctor;
-           * */
+            if ((0 <= i) && (i < id.Count()))
+            {
+                Ak.id_d(id[i]);
+                //doc.read_disk(out doc, id[i], Ak.get_Addres());
+            }
             this.Close();
         }
         private void button3_Click(object sender, EventArgs e) // Обновить

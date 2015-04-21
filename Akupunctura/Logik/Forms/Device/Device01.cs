@@ -21,13 +21,13 @@ namespace Akupunctura.Logik.Forms.Device
         private volatile System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
         private Thread Decoder; // Поток для фонового разбора данных
         private volatile bool status_Decoder; // Стутус разбора
-        private data_check data;
+        //private data_check data;
         private bool pressure_timer = false;
         Int32[] point_CV = new Int32[2]; // Точка = ток, напряжение
 
-        public Device01(Akupunctura mainForm, data_check parameters)
+        public Device01(Akupunctura mainForm)
         {
-            data = parameters;
+            //data = parameters;
             InitializeComponent();
         }
         private void dissection_collection() // Чтение с порта и разбор
@@ -67,7 +67,7 @@ namespace Akupunctura.Logik.Forms.Device
                     if (p.IsI) // Решаем кто ток, кто напряжение
                     {
                       point_CV[1] = p.Int_pack; // Забираем с разбора значение
-                      data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                      //data.put_point(point_CV[0], point_CV[1]); // Забираем точку в измерение
                     }
                     else
                     {
@@ -117,7 +117,7 @@ namespace Akupunctura.Logik.Forms.Device
     private void Device01_FormClosed(object sender, FormClosedEventArgs e) // Событие закрытия формы 
     {
         Disconnect_Click_1(sender,e);
-        data.Free = true;
+        //data.Free = true;
     }
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
     {

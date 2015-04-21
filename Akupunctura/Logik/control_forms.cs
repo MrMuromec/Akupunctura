@@ -42,9 +42,11 @@ namespace Akupunctura.Logik
         if (check_Position() && check_Doctor() && check_Patient())
         {
           //Number = numbering(Parent);
+            /*
           Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
           device01.MdiParent = Parent;
           device01.Show();
+             * */
         }
       }
       public void form_Position() // Запуск выбора бызы
@@ -67,9 +69,11 @@ namespace Akupunctura.Logik
       public void fofm_Patient() // Запуск окна выбора пациента
       {
           //Number = numbering(Parent);
+          /*
           Patient_list patient_list = new Patient_list(Parent, data_forms[Number - 1]);
           patient_list.MdiParent = Parent;
           patient_list.Show();
+           * */
       }
       /****************************************************************************************/
       public void get_Parent(Akupunctura mainForm) // Получение родителя

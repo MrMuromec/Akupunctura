@@ -24,14 +24,14 @@ namespace Akupunctura
 {
   public partial class Akupunctura : Form
   {
-    public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай) + data_check (прощай)
+    // public control_forms BD = new control_forms(); //  набор данных для форм и функции для работы с ними (возможно прощай) + data_check (прощай)
 
     private string address = Environment.CurrentDirectory + @"\БД"; // По началу там где лежит exe (Адрес папки)
 
-    private List<DateTime> ID_DOC = new List<DateTime>(); // id Докторов
-    private int i_id_doc = -1;
-    private List<DateTime> ID_PAT = new List<DateTime>(); // id Пациентов
-    private int i_id_pat = -1;
+    private List<DateTime> ID_DOC = new List<DateTime>(); // id Докторов (все)
+    private List<DateTime> ID_PAT = new List<DateTime>(); // id Пациентов (все)
+    private DateTime id_doc = DateTime.MinValue; // id доктора
+    private DateTime id_pat = DateTime.MinValue; // id пациента
 
     public Akupunctura()
     {  
@@ -42,10 +42,11 @@ namespace Akupunctura
     {
         form_Device01();
     }
-    /********************************************************************************************/
-
-
-    /********************************************************************************************/
+      /************************************************************************************** 
+       * 
+       * Дальше только работа с дочерними формами и базой
+       * 
+       **************************************************************************************/
     public List<DateTime> add_rows(string str) // Создание не совпадающего списка id 
     {
       DateTime id;
@@ -60,18 +61,15 @@ namespace Akupunctura
     /********************************************************************************************/
     public void form_Device01() // Запуск работы с прибором
     {
-      doctor local_doctor = new doctor();
-
-      if (( -1 < i_id_doc ) && ( i_id_doc < ID_DOC.Count ))
-        local_doctor.read_disk(out local_doctor, ID_DOC[i_id_doc], address);
-      /*
-       * 2 аргумента
-       * входные данные - то с чем дают (могут и не дать)
-       * выходные - то что с чем работают (то что есть)
-       * проверка выдаёт праду когда данные корекны
-       * а если ложь то нужно запросить данные
-       */
-      if (check_Position() && check_Doctor(local_doctor) && check_Patient()) ;
+        measurement local_mesement;
+        if (check_Position() && check_Doctor(id_doc) && check_Patient(id_pat))
+        {
+            /*
+            Device01 device01 = new Device01(,this);
+            device01.MdiParent = this;
+            device01.Show();  
+             */
+        }
             //Number = numbering(Parent);
             /*
             Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
@@ -85,27 +83,19 @@ namespace Akupunctura
       position.MdiParent = this;
       position.Show();
     }
-    public void fofm_Doctor(doctor local_doctor) // Запуск окна выбора врача
+    public void fofm_Doctor(doctor local_doctor ) // Запуск окна выбора врача
     {
       Authorization authorization = new Authorization(local_doctor, this);
       authorization.MdiParent = this;
       authorization.Show();
     }
-    public void fofm_Patient() // Запуск окна выбора пациента
+    public void fofm_Patient(patient local_patient) // Запуск окна выбора пациента
     {
-      /*
-      //Number = numbering(Parent);
-      Patient_list patient_list = new Patient_list(Parent, data_forms[Number - 1]);
-      patient_list.MdiParent = Parent;
-      patient_list.Show();
-       */
+        Patient_list patient_list = new Patient_list(local_patient, this);
+        patient_list.MdiParent = this;
+        patient_list.Show();
     }
-    /***************************************************************************************
-    public void get_Parent(Akupunctura mainForm) // Получение родителя
-    {
-      //this.Parent = mainForm;
-    }
-    /****************************************************************************************/
+    /********************************************************************************************/
     private bool check_Position() // Проверка наличия базы
     {
       if (!Directory.GetDirectories(address.Replace(@"\БД", "")).Contains(address))
@@ -117,28 +107,41 @@ namespace Akupunctura
       {
         ID_DOC.Clear();
         ID_DOC = add_rows(address + new doctor().get_folder(address));
+        ID_PAT.Clear();
+        ID_PAT = add_rows(address + new patient().get_folder(address));
         return true;
       }
     }
-    private bool check_Doctor(doctor local_doctor) // Проверка наличия врача
+    private bool check_Doctor(DateTime id) // Проверка наличия врача
     {
-      if (local_doctor.read_fio().Count() == 0)
-      {
-        fofm_Doctor( local_doctor);
-        return false;
-      }
-      return true;
+        doctor local_doctor = new doctor();
+        if (ID_DOC.Contains(id))
+            return true;
+        else
+            {
+            fofm_Doctor( local_doctor );
+            return false;
+            }
     }
-    private bool check_Patient() // Проверка наличия пациента
+    private bool check_Patient(DateTime id) // Проверка наличия пациента
     {
-      /*
-      if (local_patient.read_fio().Count == 0)
-      {
-        fofm_Patient();
-        return false;
-      }
-       * */
-      return true;
+        patient local_patient = new patient();
+        if (ID_PAT.Contains(id))
+            return true;
+        else
+        {
+            fofm_Patient( local_patient );
+            return false;
+        }
+    }
+    /********************************************************************************************/
+    public void id_d(DateTime id) // Выбранный докто
+    {
+        id_doc = id;
+    }
+    public void id_p(DateTime id) // Выбранный пациент
+    {
+        id_pat = id;
     }
     /********************************************************************************************/
     public void Addres(string address) // Получение адреса

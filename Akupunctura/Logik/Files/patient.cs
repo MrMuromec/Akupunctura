@@ -10,15 +10,43 @@ namespace Akupunctura.Logik.Files
   [Serializable]
   public class patient
   {
+      const string name_folder = "patient"; // Название директории 
       private DateTime id_patient;// Дата создания записи
       private DateTime data_patient; // Дата рождения 
       private List<string> FIO = new List<string>();
+      [NonSerialized]
+      private BinaryFormatter formatter; // Для сериализации
 
-      public void clean() // Чистка
+      public string get_folder(string str) // Получение названия подкаталога
       {
-          FIO.Clear();
-          // А вот с датой хз
+          folder(str);
+          return (@"\" + name_folder);
       }
+
+      private void folder(string str) // Создание папки для врачей
+      {
+          System.IO.Directory.CreateDirectory(str + @"\" + name_folder);
+      }
+      private string id_str(DateTime id) // Перевод в строку названия файла
+      {
+          return id.ToString("u").Replace(':', ';') + ".txt";
+      }
+
+      public void save_disk(patient pat, string str) // Сохранение на диск
+      {
+          formatter = new BinaryFormatter(); // Для сериализации
+          folder(str);
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + id_str(id_patient), FileMode.OpenOrCreate))
+              formatter.Serialize(f, pat);
+      }
+      public void read_disk(out patient pat, DateTime id, string str) // Загрузка с диска
+      {
+          formatter = new BinaryFormatter(); // Для сериализации
+          folder(str);
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + id_str(id), FileMode.Open))
+              pat = (patient)formatter.Deserialize(f);
+      }
+
       public List<string> read_fio() // Чтение
       {
           return FIO;
@@ -31,7 +59,7 @@ namespace Akupunctura.Logik.Files
           }
           return str;
       }
-      public DateTime read_id() // Чтение
+      public DateTime read_id()  // Чтение id
       {
           return id_patient;
       }

@@ -14,9 +14,9 @@ namespace Akupunctura.Logik.Files
       private DateTime id_doctor = DateTime.MinValue; // Дата создания записи
       private List<string> FIO = new List<string>(); // ФИО
       [NonSerialized]
-      private BinaryFormatter formatter = new BinaryFormatter(); // Для сериализации
+      private BinaryFormatter formatter; // Для сериализации
 
-      public string get_folder(string str)
+      public string get_folder(string str) // Получение названия подкаталога
       {
         folder(str);
         return (@"\" + name_folder);
@@ -33,14 +33,16 @@ namespace Akupunctura.Logik.Files
 
       public void save_disk ( doctor doc, string str ) // Сохранение на диск
       {
+          formatter = new BinaryFormatter(); // Для сериализации
           folder(str);
-          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder + id_str(id_doctor), FileMode.OpenOrCreate))
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + id_str(id_doctor), FileMode.OpenOrCreate))
               formatter.Serialize(f, doc);
       }
       public void read_disk ( out doctor doc , DateTime id, string str ) // Загрузка с диска
       {
+          formatter = new BinaryFormatter(); // Для сериализации
           folder(str);
-          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder + id_str(id), FileMode.Open))
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + id_str(id), FileMode.Open))
               doc = (doctor)formatter.Deserialize(f);
       }
 
