@@ -64,18 +64,11 @@ namespace Akupunctura
         measurement local_mesement;
         if (check_Position() && check_Doctor(id_doc) && check_Patient(id_pat))
         {
-            /*
-            Device01 device01 = new Device01(,this);
+            local_mesement = new measurement();
+            Device01 device01 = new Device01(local_mesement,this);
             device01.MdiParent = this;
             device01.Show();  
-             */
         }
-            //Number = numbering(Parent);
-            /*
-            Device01 device01 = new Device01(Parent, data_forms[Number - 1]);
-            device01.MdiParent = Parent;
-            device01.Show();
-            * */
     }
     public void form_Position() // Запуск выбора бызы
     {

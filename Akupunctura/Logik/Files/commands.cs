@@ -9,6 +9,7 @@ namespace Akupunctura.Logik.Files
 {
     public class commands
     {
+        
         private const string Doctor = "doctor", Patient = "patient", Measurement = "measurement", Rights_doctor = "rights_doctor", Table_id = "table_id"; // Имена директорий
         private BinaryFormatter formatter = new BinaryFormatter();
 
@@ -50,7 +51,7 @@ namespace Akupunctura.Logik.Files
             return id;
         }
         /*************************************************************************************************************/
-        public void savr_d(string Address, data_check Data, string str) // Сохранения в БД
+        public void savr_d(string Address, /*data_check Data,*/ string str) // Сохранения в БД
         {
             /*
              * Пример для ToString("u")
@@ -59,6 +60,7 @@ namespace Akupunctura.Logik.Files
              * Replace(':',';')
              * заменяем : на ;
              * */
+            /*
             folder(Address);
             switch (str)
             {
@@ -88,6 +90,7 @@ namespace Akupunctura.Logik.Files
                         break;
                     }
             }
+             * */
         }
         /*
         public void save_id(string Address) // Сохранение списков с индексацией 
@@ -132,15 +135,9 @@ namespace Akupunctura.Logik.Files
         /*************************************************************************************************************/
         /*                                             Загрузки                                                      */
         /*************************************************************************************************************/
+        /*
         public data_check loading_d(string Address, data_check Data, DateTime d_id, DateTime p_id, DateTime m_id) // Загркзуа измерения
         {
-            /*
-             * Пример для ToString("u")
-             * 15.06.2009 13:45:30 -> 2009-06-15 20:45:30Z
-             * Поскольку : недопустим в название папки, то используем
-             * Replace(':',';')
-             * заменяем : на ;
-             * */
             folder(Address);
             if ((Directory.GetFiles(Address + @"\" + Doctor).Length !=0) && (d_id != DateTime.MinValue))
                 Data.local_doctor = loading_(Data.local_doctor, Address + @"\" + Doctor + @"\" + d_id.ToString("u").Replace(':', ';') + ".txt"); // Загркзуа докторов
@@ -152,6 +149,7 @@ namespace Akupunctura.Logik.Files
             // Список id  что сохранение, что чтение надо править
             return Data;
         }
+         * */
         /*
         public void loading_id(string Address) // Загркзуа списков с индексацией 
         {
