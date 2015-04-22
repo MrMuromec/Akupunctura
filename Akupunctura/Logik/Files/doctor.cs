@@ -11,10 +11,9 @@ namespace Akupunctura.Logik.Files
   public class doctor
   {
       const string name_folder = "doctor"; // Название директории 
-      private DateTime id_doctor = DateTime.MinValue; // Дата создания записи
+      private DateTime id_doctor; // Дата создания записи
       private List<string> FIO = new List<string>(); // ФИО
-      [NonSerialized]
-      private BinaryFormatter formatter; // Для сериализации
+      [NonSerialized] private BinaryFormatter formatter; // Для сериализации
 
       public string get_folder(string str) // Получение названия подкаталога
       {
@@ -45,7 +44,10 @@ namespace Akupunctura.Logik.Files
           using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + id_str(id), FileMode.Open))
               doc = (doctor)formatter.Deserialize(f);
       }
-
+      public void save_id() // сохранение id
+      {
+        id_doctor = DateTime.Now.ToUniversalTime();
+      }
       public DateTime read_id()  // Чтение id
       {
           return id_doctor;

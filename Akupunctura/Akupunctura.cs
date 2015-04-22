@@ -65,7 +65,7 @@ namespace Akupunctura
         if (check_Position() && check_Doctor(id_doc) && check_Patient(id_pat))
         {
             local_mesement = new measurement();
-            Device01 device01 = new Device01(local_mesement,this);
+            Device01 device01 = new Device01(local_mesement, id_doc, id_pat, this);
             device01.MdiParent = this;
             device01.Show();  
         }

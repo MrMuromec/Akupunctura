@@ -14,8 +14,7 @@ namespace Akupunctura.Logik.Files
       private DateTime id_patient;// Дата создания записи
       private DateTime data_patient; // Дата рождения 
       private List<string> FIO = new List<string>();
-      [NonSerialized]
-      private BinaryFormatter formatter; // Для сериализации
+      [NonSerialized] private BinaryFormatter formatter; // Для сериализации
 
       public string get_folder(string str) // Получение названия подкаталога
       {
@@ -58,6 +57,10 @@ namespace Akupunctura.Logik.Files
               str += FIO[i] + " ";
           }
           return str;
+      }
+      public void save_id() // сохранение id
+      {
+        id_patient = DateTime.Now.ToUniversalTime();
       }
       public DateTime read_id()  // Чтение id
       {

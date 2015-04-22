@@ -25,9 +25,14 @@ namespace Akupunctura.Logik.Forms.Device
         private measurement mes;
         private bool pressure_timer = false;
         private Int32[] point_CV = new Int32[2]; // Точка = ток, напряжение
+        private Akupunctura Ak;
+        private DateTime id_d, id_p;
 
-        public Device01(measurement mes, Akupunctura mainForm)
+        public Device01(measurement mes, DateTime id_d, DateTime id_p, Akupunctura Ak)
         {
+            this.id_d = id_d;
+            this.id_p = id_p;
+            this.Ak = Ak;
             this.mes = mes;
             InitializeComponent();
         }
@@ -43,10 +48,13 @@ namespace Akupunctura.Logik.Forms.Device
                   r_byte = (byte)Port.BaseStream.ReadByte(); // Считывание с порта  
                   if (r_byte == 0x0F) // 0000 1111 (начало измерение)
                   {
+                    mes.Clear();
                     continue;
                   }
                   if (r_byte == 0x07) // 0000 0111 (конец измерения)
                   {
+                    mes.save_id(id_d,id_p);
+                    mes.save_disk(mes, Ak.get_Addres());
                     continue;
                   }
                   if ((r_byte & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000

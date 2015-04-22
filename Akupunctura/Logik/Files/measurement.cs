@@ -14,33 +14,26 @@ namespace Akupunctura.Logik.Files
       const string name_folder_CV = "CV"; // Название директории
       const string name_folder_ID = "ID"; // Название директории 
       private DateTime id_measurement; // Дата создания записи
-      private DateTime id_doctor = DateTime.MinValue; // id врача
+      private DateTime id_doctor; // id врача
       private DateTime id_patient; //  id пациента
-      [NonSerialized]
-      private List<Int32> Currents = new List<Int32>();
-      private List<Int32> Voltages = new List<Int32>();
-      private BinaryFormatter formatter; // Для сериализации
+      [NonSerialized] private BinaryFormatter formatter; // Для сериализации
+      [NonSerialized] private List<Int32> Currents = new List<Int32>();
+      [NonSerialized] private List<Int32> Voltages = new List<Int32>();
 
-      public void clean() // Чистка
+      public void Clear()
       {
-          Currents.Clear();
-          Voltages.Clear();
-          // А вот с датой хз
+        Currents.Clear();
+        Voltages.Clear();
       }
+
       public void save_dimension(Int32 Current, Int32 Voltage) // сохранение (по точкам)
       {
           Currents.Add(Current);
           Voltages.Add(Voltage);
       }
-      public void save_dimension(List<Int32> Current, List<Int32> Voltage) // сохранение
+      public void save_id(DateTime id_doctor, DateTime id_patient) // сохранение id
       {
-          clean();
-          Currents.Concat(Current);
-          Voltages.Concat(Current);
-      }
-      public void save_(DateTime id_m) // сохранение id
-      {
-          id_measurement = id_m;
+          id_measurement = DateTime.Now.ToUniversalTime();
       }
 
       public List<Int32> read_current() // Чтение
@@ -55,8 +48,15 @@ namespace Akupunctura.Logik.Files
       {
           return id_measurement;
       }
-      private void save_(measurement meas, string str) // Сохранение 
+      private void folder(string str) // Создание папки для врачей
       {
+        System.IO.Directory.CreateDirectory(str + @"\" + name_folder);
+        System.IO.Directory.CreateDirectory(str + @"\" + name_folder + @"\" + name_folder_ID);
+        System.IO.Directory.CreateDirectory(str + @"\" + name_folder + @"\" + name_folder_CV);
+      }
+      public void save_disk(measurement meas, string str) // Сохранение на диск
+      {
+          folder(str);
           formatter = new BinaryFormatter(); // Для сериализации
           using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder_ID + @"\" + id_str(id_measurement), FileMode.OpenOrCreate))
               formatter.Serialize(f, meas);
@@ -69,8 +69,9 @@ namespace Akupunctura.Logik.Files
               sw.Close();
           }
       }
-      private void loading_(out measurement meas, DateTime id, string str) // Загрузка
+      public void loading_(out measurement meas, DateTime id, string str) // Загрузка с диска
       {
+          folder(str);
           formatter = new BinaryFormatter(); // Для сериализации
           using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder_ID + @"\" + id_str(id), FileMode.OpenOrCreate))
               meas = (measurement)formatter.Deserialize(f);

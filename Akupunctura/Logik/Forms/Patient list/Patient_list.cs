@@ -34,6 +34,7 @@ namespace Akupunctura.Logik.Forms.patient_list
                 MessageBox.Show("введите ФИО");
             else
             {
+                pat.save_id();
                 pat.save_disk(pat, Ak.get_Addres());
             }
             show_list(sender, e);

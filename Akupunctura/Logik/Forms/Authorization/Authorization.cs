@@ -40,6 +40,7 @@ namespace Akupunctura.Logik.Forms.Authorization
                 MessageBox.Show("введите ФИО");
             else
             {
+                doc.save_id();
                 doc.save_disk(doc, Ak.get_Addres());
             }
             show_list(sender, e);
