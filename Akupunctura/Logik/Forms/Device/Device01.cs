@@ -45,7 +45,8 @@ namespace Akupunctura.Logik.Forms.Device
           while (status_Decoder)
               try
               {
-                  r_byte = (byte)Port.BaseStream.ReadByte(); // Считывание с порта  
+                  while (Port.BytesToRead < 1) Thread.Sleep(1);
+                  r_byte = (byte)Port.ReadByte(); // Считывание с порта  
                   if (r_byte == 0x0F) // 0000 1111 (начало измерение)
                   {
                     mes.Clear();

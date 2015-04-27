@@ -50,7 +50,6 @@
     <Compile Include="Akupunctura.Designer.cs">
       <DependentUpon>Akupunctura.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logik\Files\commands.cs" />
     <Compile Include="Logik\Files\doctor.cs" />
     <Compile Include="Logik\Files\measurement.cs" />
     <Compile Include="Logik\Files\patient.cs" />

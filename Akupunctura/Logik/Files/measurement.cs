@@ -34,20 +34,10 @@ namespace Akupunctura.Logik.Files
       public void save_id(DateTime id_doctor, DateTime id_patient) // сохранение id
       {
           id_measurement = DateTime.Now.ToUniversalTime();
+          this.id_doctor = id_doctor;
+          this.id_patient = id_patient;
       }
 
-      public List<Int32> read_current() // Чтение
-      {
-          return Currents;
-      }
-      public List<Int32> read_voltage() // Чтение
-      {
-          return Voltages;
-      }
-      public DateTime read_id_measurement() // Чтение id
-      {
-          return id_measurement;
-      }
       private void folder(string str) // Создание папки для врачей
       {
         System.IO.Directory.CreateDirectory(str + @"\" + name_folder);
@@ -57,24 +47,33 @@ namespace Akupunctura.Logik.Files
       public void save_disk(measurement meas, string str) // Сохранение на диск
       {
           folder(str);
+          save_seraalize(meas,str);
+          save_tip(meas, str);
+      }
+      private void save_seraalize(measurement meas, string str) // сохранение сереализуемых id
+      {
           formatter = new BinaryFormatter(); // Для сериализации
           using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder_ID + @"\" + id_str(id_measurement), FileMode.OpenOrCreate))
               formatter.Serialize(f, meas);
+      }
+      private void save_tip(measurement meas, string str) // сохранение самих измерений
+      {
           using (StreamWriter sw = new StreamWriter(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id_measurement) + ".txt"))
           {
-              List<Int32> C = meas.read_current();
-              List<Int32> V = meas.read_voltage();
-              for (int i = 0; i < C.Count(); i++)
-                  sw.WriteLine(" " + C[i].ToString() + " " + V[i].ToString()); // А потому что так было раньше, но не совсем так
+              for (int i = 0; i < Currents.Count(); i++)
+                  sw.WriteLine(" " + Currents[i].ToString() + " " + Voltages[i].ToString()); // А потому что так было раньше, но не совсем так
               sw.Close();
           }
       }
       public void loading_(out measurement meas, DateTime id, string str) // Загрузка с диска
       {
           folder(str);
-          formatter = new BinaryFormatter(); // Для сериализации
-          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder_ID + @"\" + id_str(id), FileMode.OpenOrCreate))
-              meas = (measurement)formatter.Deserialize(f);
+          loading_seraalize(out meas, id, str);
+          meas = loading_tip(meas, id, str);
+
+      }
+      private measurement loading_tip(measurement meas, DateTime id, string str) // загрузка типизированного файла
+      {
           using (StreamReader sr = new StreamReader(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id) + ".txt"))
           {
               String line;
@@ -86,6 +85,13 @@ namespace Akupunctura.Logik.Files
               }
               sr.Close();
           }
+          return meas;
+      }
+      private void loading_seraalize(out measurement meas, DateTime id, string str) // загрузка id
+      {
+          formatter = new BinaryFormatter(); // Для сериализации
+          using (FileStream f = new FileStream(str + @"\" + name_folder + @"\" + name_folder_ID + @"\" + id_str(id), FileMode.OpenOrCreate))
+              meas = (measurement)formatter.Deserialize(f);
       }
       private string id_str(DateTime id) // Перевод в строку названия файла
       {
