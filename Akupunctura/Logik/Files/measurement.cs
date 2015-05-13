@@ -58,7 +58,7 @@ namespace Akupunctura.Logik.Files
       }
       private void save_tip(measurement meas, string str) // сохранение самих измерений
       {
-          using (StreamWriter sw = new StreamWriter(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id_measurement) + ".txt"))
+          using (StreamWriter sw = new StreamWriter(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id_measurement)))
           {
               for (int i = 0; i < Currents.Count(); i++)
                   sw.WriteLine(" " + Currents[i].ToString() + " " + Voltages[i].ToString()); // А потому что так было раньше, но не совсем так
@@ -74,7 +74,7 @@ namespace Akupunctura.Logik.Files
       }
       private measurement loading_tip(measurement meas, DateTime id, string str) // загрузка типизированного файла
       {
-          using (StreamReader sr = new StreamReader(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id) + ".txt"))
+          using (StreamReader sr = new StreamReader(str + @"\" + name_folder + @"\" + name_folder_CV + @"\" + id_str(id) ))
           {
               String line;
               line = sr.ReadLine();
