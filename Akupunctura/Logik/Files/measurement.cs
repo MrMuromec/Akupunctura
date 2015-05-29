@@ -46,9 +46,21 @@ namespace Akupunctura.Logik.Files
       }
       public void save_disk(measurement meas, string str) // Сохранение на диск
       {
+          kost();
           folder(str);
           save_seraalize(meas,str);
           save_tip(meas, str);
+      }
+      private void kost ()
+      {
+          int z, c = 5;
+          Int32[] v = new Int32[c];
+          for (int i = 0; i < Currents.Count()-c; i++)
+          {
+              Voltages.CopyTo(i,v,0,c);
+              Array.Sort(v);
+              Voltages[i] = v[2];
+          }
       }
       private void save_seraalize(measurement meas, string str) // сохранение сереализуемых id
       {
