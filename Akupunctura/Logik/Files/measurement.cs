@@ -13,6 +13,7 @@ namespace Akupunctura.Logik.Files
       const string name_folder = "measurement"; // Название директории 
       const string name_folder_CV = "CV"; // Название директории
       const string name_folder_ID = "ID"; // Название директории 
+      const string name_folder_CG = "CG"; // Название директории 
       private DateTime id_measurement; // Дата создания записи
       private DateTime id_doctor; // id врача
       private DateTime id_patient; //  id пациента
@@ -43,6 +44,7 @@ namespace Akupunctura.Logik.Files
         System.IO.Directory.CreateDirectory(str + @"\" + name_folder);
         System.IO.Directory.CreateDirectory(str + @"\" + name_folder + @"\" + name_folder_ID);
         System.IO.Directory.CreateDirectory(str + @"\" + name_folder + @"\" + name_folder_CV);
+        System.IO.Directory.CreateDirectory(str + @"\" + name_folder + @"\" + name_folder_CG);
       }
       public void save_disk(measurement meas, string str) // Сохранение на диск
       {
@@ -53,13 +55,13 @@ namespace Akupunctura.Logik.Files
       }
       private void kost ()
       {
-          int z, c = 5;
+          int z, c = 7;
           Int32[] v = new Int32[c];
           for (int i = 0; i < Currents.Count()-c; i++)
           {
               Voltages.CopyTo(i,v,0,c);
               Array.Sort(v);
-              Voltages[i] = v[2];
+              Voltages[i] = v[3];
           }
       }
       private void save_seraalize(measurement meas, string str) // сохранение сереализуемых id
