@@ -52,16 +52,85 @@ namespace Akupunctura.Logik.Files
           folder(str);
           save_seraalize(meas,str);
           save_tip(meas, str);
+          save_CG(meas, str);
+      }
+      private void save_CG(measurement meas, string str)  // сохранение  нелинейной проводимости и ёмкость кожи 
+      {
+          double[] X = _CG();
+          using (StreamWriter sw = new StreamWriter(str + @"\" + name_folder + @"\" + name_folder_CG + @"\" + id_str(id_measurement)))
+          {
+              for (int i = 0; i < Currents.Count(); i++)
+                  sw.WriteLine(X.ToString()); 
+              sw.Close();
+          }
+      }
+      private double[] _CG() // рассчёт нелинейной проводимости и ёмкость кожи 
+      {
+          List<double> currents = new List<double>(); 
+          List<double> voltages = new List<double>();
+          const double T = 1953;  
+          const int kr = 10; // сдвиг от края
+          const int size = 5 ; // размер ситемы (кол-во ур.)
+          // A*X=B ищем X
+          double[] X = new double[size];
+          double[,] A = new double[size, size];
+          double[] B = new double[size];
+
+          for (int ij = 0; ij < Voltages.Count(); ij++)
+              voltages.Add((double)Voltages[ij] * 1677721.6);
+
+          for (int ij = 0; ij < Currents.Count(); ij++)
+              currents.Add((double)Currents[ij] * 33554431999999.996);
+
+          // Заполнение А
+          for (int i = 0; i< size -1 ;i++ )
+              for (int j = 0; j < size - 1; j++)
+                  for (int ij = kr; ij < voltages.Count() - kr; ij++)
+                      A[i, j] += Math.Pow(voltages[ij], i + j + 2);
+
+          for (int i = 0; i < size ; i++)
+          {
+              for (int ij = kr; ij < voltages.Count() - kr; ij++)
+                  if (i != size - 1)
+                      A[i, 5] += Math.Pow(voltages[ij], i + 1) * (voltages[ij + 1] - voltages[ij - 1]) / (2 * T);
+                  else
+                      A[i, 5] += Math.Pow((voltages[ij + 1] - voltages[ij - 1]) / (2 * T), i + 1);
+              A[5, i] = A[i, 5];
+          }
+
+          // Заполнение B
+          for (int i = 0; i < size - 1; i++)
+              for (int ij = kr; ij < voltages.Count() - kr; ij++)
+                  B[i] += currents[ij] * Math.Pow(voltages[ij], i + 1);
+
+          for (int ij = kr; ij < voltages.Count() - kr; ij++)
+              B[size - 1] += currents[ij] * (voltages[ij + 1] - voltages[ij - 1]) / (2 * T);
+
+          // A*X=B ищем X
+          int info = 0;
+          alglib.densesolverreport rep;
+          alglib.rmatrixsolve(A, size, B, out info, out rep, out X);
+
+          return X;
       }
       private void kost ()
-      {
-          int z, c = 7;
+      {         
+          // Фильтр среднего
+          int c = 7;
           Int32[] v = new Int32[c];
-          for (int i = 0; i < Currents.Count()-c; i++)
+          // Костыль
+          for (int i = 0; i < Voltages.Count() - c; i++)
           {
               Voltages.CopyTo(i,v,0,c);
               Array.Sort(v);
               Voltages[i] = v[3];
+          }
+          // 
+          for (int i = 0; i < Currents.Count() - c; i++)
+          {
+              Currents.CopyTo(i, v, 0, c);
+              Array.Sort(v);
+              Currents[i] = v[3];
           }
       }
       private void save_seraalize(measurement meas, string str) // сохранение сереализуемых id

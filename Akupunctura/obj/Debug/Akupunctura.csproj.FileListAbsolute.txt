@@ -81,3 +81,4 @@ F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.Properties.Resources.resources
 F:\Akupunctura\Akupunctura\obj\Debug\Akupunctura.csproj.GenerateResource.Cache
 F:\Akupunctura\Akupunctura\bin\Debug\Akupunctura.exe
 F:\Akupunctura\Akupunctura\bin\Debug\Akupunctura.pdb
+F:\Akupunctura\Akupunctura\bin\Debug\alglibnet2.dll

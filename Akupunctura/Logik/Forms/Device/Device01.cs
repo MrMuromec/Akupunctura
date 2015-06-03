@@ -43,19 +43,19 @@ namespace Akupunctura.Logik.Forms.Device
           byte[] pack_ = new byte[size_p]; // Пачка
           byte n = 0; // Счётчик  
           byte r_byte; // Загруженный байт
-          StreamWriter sw = new StreamWriter("123_123.txt");
+          //StreamWriter sw = new StreamWriter("123_123.txt");
           while (status_Decoder)
               try
               {
 
                   Thread.Sleep(0);
                   
-                  while (Port.BytesToRead < 1) Thread.Sleep(5);
+                  while (Port.BytesToRead <= 1) Thread.Sleep(5);
                   Thread.Sleep(0);
-                  //r_byte = (byte)Port.ReadByte(); // Считывание с порта  
-                  r_byte = (byte)Port.BaseStream.ReadByte();
+                  r_byte = (byte)Port.ReadByte(); // Считывание с порта  
+                  //r_byte = (byte)Port.BaseStream.ReadByte();
 
-                  sw.WriteLine(r_byte +"\n");
+                  //sw.WriteLine(r_byte +"\n");
 
                   /*
                   byte[] buffer = new byte[256];
@@ -112,14 +112,12 @@ namespace Akupunctura.Logik.Forms.Device
                   }
               catch (Exception e3)
               {
-                  MessageBox.Show("Port.BaseStream.ReadByte" + e3.Message, "Ошибка чтения"); // Что-то пошлло не так
+                  MessageBox.Show(e3.Message, "Ошибка чтения"); // Что-то пошлло не так
                   status_Decoder = false;
                   break;
               }
         }
-        const byte size_p = 5; // Размер пачки          
-        byte[] pack_ = new byte[size_p]; // Пачка
-        byte n = 0; // Счётчик  
+
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
     {
         try
@@ -144,7 +142,7 @@ namespace Akupunctura.Logik.Forms.Device
             Port.DataBits = 8;
             Port.BaudRate = 921600;
             Port.Parity = Parity.None;
-            //Port.ReceivedBytesThreshold = 100;
+            //Port.ReceivedBytesThreshold = 500000;
 
             groupBox1.Enabled = groupBox4.Enabled = true; // Поля
         }
