@@ -47,10 +47,7 @@ namespace Akupunctura.Logik.Forms.Device
           while (status_Decoder)
               try
               {
-
-                  Thread.Sleep(0);
-                  
-                  while (Port.BytesToRead <= 1) Thread.Sleep(5);
+                  while (Port.BytesToRead <= 1) Thread.Sleep(1);
                   Thread.Sleep(0);
                   r_byte = (byte)Port.ReadByte(); // Считывание с порта  
                   //r_byte = (byte)Port.BaseStream.ReadByte();

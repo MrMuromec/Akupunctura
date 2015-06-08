@@ -56,11 +56,12 @@ namespace Akupunctura.Logik.Files
       }
       private void save_CG(measurement meas, string str)  // сохранение  нелинейной проводимости и ёмкость кожи 
       {
+          const int size = 5 ; // размер ситемы (кол-во ур.)
           double[] X = _CG();
           using (StreamWriter sw = new StreamWriter(str + @"\" + name_folder + @"\" + name_folder_CG + @"\" + id_str(id_measurement)))
           {
-              for (int i = 0; i < Currents.Count(); i++)
-                  sw.WriteLine(X.ToString()); 
+              for (int i = 0; i < size; i++)
+                  sw.WriteLine(X[i].ToString()); 
               sw.Close();
           }
       }
@@ -83,7 +84,7 @@ namespace Akupunctura.Logik.Files
               currents.Add((double)Currents[ij] * 33554431999999.996);
 
           // Заполнение А
-          for (int i = 0; i< size -1 ;i++ )
+          for (int i = 0; i< size - 1 ;i++ )
               for (int j = 0; j < size - 1; j++)
                   for (int ij = kr; ij < voltages.Count() - kr; ij++)
                       A[i, j] += Math.Pow(voltages[ij], i + j + 2);
@@ -92,10 +93,10 @@ namespace Akupunctura.Logik.Files
           {
               for (int ij = kr; ij < voltages.Count() - kr; ij++)
                   if (i != size - 1)
-                      A[i, 5] += Math.Pow(voltages[ij], i + 1) * (voltages[ij + 1] - voltages[ij - 1]) / (2 * T);
+                      A[i, size - 1] += Math.Pow(voltages[ij], i + 1) * (voltages[ij + 1] - voltages[ij - 1]) / (2 * T);
                   else
-                      A[i, 5] += Math.Pow((voltages[ij + 1] - voltages[ij - 1]) / (2 * T), i + 1);
-              A[5, i] = A[i, 5];
+                      A[i, size - 1] += Math.Pow((voltages[ij + 1] - voltages[ij - 1]) / (2 * T), i + 1);
+              A[size - 1, i] = A[i, size - 1];
           }
 
           // Заполнение B
