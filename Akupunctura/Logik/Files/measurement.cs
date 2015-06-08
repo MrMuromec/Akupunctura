@@ -76,12 +76,12 @@ namespace Akupunctura.Logik.Files
           double[] X = new double[size];
           double[,] A = new double[size, size];
           double[] B = new double[size];
-
+         
           for (int ij = 0; ij < Voltages.Count(); ij++)
-              voltages.Add((double)Voltages[ij] * 1677721.6);
+              voltages.Add((double) - Voltages[ij] * 1.2 * 4.6 / (2 ^ 24));
 
           for (int ij = 0; ij < Currents.Count(); ij++)
-              currents.Add((double)Currents[ij] * 33554431999999.996);
+            currents.Add((double)Currents[ij] * 3 * 1.2 * 4.6 / (2 ^ 24 * 10000000));
 
           // Заполнение А
           for (int i = 0; i< size - 1 ;i++ )

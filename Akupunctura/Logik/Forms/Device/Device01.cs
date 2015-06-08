@@ -20,7 +20,6 @@ namespace Akupunctura.Logik.Forms.Device
     public partial class Device01 : Form
     {
         private volatile System.IO.Ports.SerialPort Port = new System.IO.Ports.SerialPort(); // Порт (COM порт, настройки далее в проге)
-        private Thread Decoder; // Поток для фонового разбора данных
         private volatile bool status_Decoder; // Стутус разбора
         private measurement mes;
         private bool pressure_timer = false;
@@ -35,84 +34,6 @@ namespace Akupunctura.Logik.Forms.Device
             this.Ak = Ak;
             this.mes = mes;
             InitializeComponent();
-        }
-        private void dissection_() // Чтение с порта и разбор
-        {
-          
-          const byte size_p = 5; // Размер пачки     
-          byte[] pack_ = new byte[size_p]; // Пачка
-          byte n = 0; // Счётчик  
-          byte r_byte; // Загруженный байт
-          //StreamWriter sw = new StreamWriter("123_123.txt");
-          while (status_Decoder)
-              try
-              {
-                  while (Port.BytesToRead <= 1) Thread.Sleep(1);
-                  Thread.Sleep(0);
-                  r_byte = (byte)Port.ReadByte(); // Считывание с порта  
-                  //r_byte = (byte)Port.BaseStream.ReadByte();
-
-                  //sw.WriteLine(r_byte +"\n");
-
-                  /*
-                  byte[] buffer = new byte[256];
-                  while (Port.BytesToRead < 1) Thread.Sleep(5);
-                  //byte[] b = new byte[Port.BytesToRead];
-                  Thread.Sleep(0);
-                  
-                  Port.BaseStream.Read(buffer, 0, (int)buffer.Length);
-                  for (int j = 0; j < buffer.Length; j++)
-                  {
-                      r_byte = buffer[j];
-                      if (r_byte == 0) continue;
-                      //**/
-
-                      if (r_byte == 0x0F) // 0000 1111 (начало измерение)
-                      {
-                          mes.Clear();
-                          continue;
-                      }
-                      if (r_byte == 0x07) // 0000 0111 (конец измерения)
-                      {
-                          mes.save_id(id_d, id_p);
-                          mes.save_disk(mes, Ak.get_Addres());
-                          continue;
-                      }
-                      if ((r_byte & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000
-                      {
-                          n = 0;
-                          pack_[n] = r_byte;
-                          continue;
-                      }
-                      if (((r_byte & 0x80) != 0)) // не первый байт пачки 1*** **** & 1000 0000 != 0000 0000
-                      {
-                          n++;
-                          if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
-                          {
-                              status_Decoder = false;
-                              break;
-                          }
-                          pack_[n] = r_byte;
-                          package p = new package(pack_); // Кидаем пачку на разбор
-                          Thread.Sleep(0);
-                          if (p.IsI) // Решаем кто ток, кто напряжение
-                          {
-                              point_CV[1] = p.Int_pack; // Забираем с разбора значение
-                              mes.save_dimension(point_CV[0], point_CV[1]); // Забираем точку в измерение
-                          }
-                          else
-                          {
-                              point_CV[0] = p.Int_pack; // Забираем с разбора значение
-                          }
-                          continue;
-                      }
-                  }
-              catch (Exception e3)
-              {
-                  MessageBox.Show(e3.Message, "Ошибка чтения"); // Что-то пошлло не так
-                  status_Decoder = false;
-                  break;
-              }
         }
 
     public void Device01_Load(object sender, EventArgs e) // Событие загрузки формы (установка параметров соединения по умолчанию)
@@ -152,19 +73,75 @@ namespace Akupunctura.Logik.Forms.Device
     {
         Disconnect_Click_1(sender,e);
     }
+    private void DataReceivedHandler(
+                object sender,
+                SerialDataReceivedEventArgs e) // Чтение с порта по событию
+    {
+        const byte size_p = 5; // Размер пачки     
+        byte[] pack_ = new byte[size_p]; // Пачка
+        byte n = 0; // Счётчик  
+        byte r_byte; // Загруженный байт
+        try
+        {
+            while (Port.BytesToRead > 0)
+            {
+                Thread.Sleep(0);
+                r_byte = (byte)Port.ReadByte(); // Считывание с порта  
+
+                if (r_byte == 0x0F) // 0000 1111 (начало измерение)
+                {
+                    mes.Clear();
+                    continue;
+                }
+                if (r_byte == 0x07) // 0000 0111 (конец измерения)
+                {
+                    mes.save_id(id_d, id_p);
+                    mes.save_disk(mes, Ak.get_Addres());
+                    continue;
+                }
+                if ((r_byte & 0xC0) == 0x40) // первый байт пачки 01** **** & 1100 0000 = 0100 0000
+                {
+                    n = 0;
+                    pack_[n] = r_byte;
+                    continue;
+                }
+                if (((r_byte & 0x80) != 0)) // не первый байт пачки 1*** **** & 1000 0000 != 0000 0000
+                {
+                    n++;
+                    if (n == size_p) // Всё плохо (0,1,2,3,4 - допустимые индексы в пачке)
+                    {
+                        status_Decoder = false;
+                        break;
+                    }
+                    pack_[n] = r_byte;
+                    package p = new package(pack_); // Кидаем пачку на разбор
+                    Thread.Sleep(0);
+                    if (p.IsI) // Решаем кто ток, кто напряжение
+                    {
+                        point_CV[1] = p.Int_pack; // Забираем с разбора значение
+                        mes.save_dimension(point_CV[0], point_CV[1]); // Забираем точку в измерение
+                    }
+                    else
+                    {
+                        point_CV[0] = p.Int_pack; // Забираем с разбора значение
+                    }
+                    continue;
+                }
+            }
+        }
+        catch (Exception e3)
+        {
+            MessageBox.Show(e3.Message, "Ошибка чтения"); // Что-то пошлло не так
+        }
+
+    }
     private void Connect_Click_1(object sender, EventArgs e) // Подключение
     {
+        Port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         // Отрытие порта
         for (Port.Open(); !Port.IsOpen; Thread.Sleep(1)) ; // Что бы открылся
         if (Port.IsOpen)
         {
-              // Новый поток для разбора
-
-              status_Decoder = true;
-              Decoder = new Thread(dissection_);
-              Decoder.IsBackground = true;
-              Decoder.Start();
-
               // Элементы управления(видимость/невидемость, отвечать/не отвечать)
               groupBox2.Enabled = true;
               groupBox4.Visible = true;
